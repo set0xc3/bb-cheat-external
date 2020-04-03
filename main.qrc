@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/resource">
+        <file>fonts/smallest_pixel-7.ttf</file>
+        <file>images/launcher_dark.png</file>
+        <file>images/launcher_light.png</file>
+        <file>images/steam_dark.png</file>
+        <file>images/steam_light.png</file>
+        <file>images/logo2.png</file>
+        <file>images/switch_active.png</file>
+        <file>images/switch_noactive.png</file>
+        <file>images/cloud.png</file>
+        <file>images/eraser.png</file>
+        <file>images/save.png</file>
+    </qresource>
+</RCC>
