@@ -81,15 +81,15 @@ AuthForm::~AuthForm()
     delete ui;
 }
 
+// Авторизация
 void AuthForm::on_loginButton_clicked()
 {   
-    string name = ui->name->text().toStdString();
-    string password = ui->password->text().toStdString();
+    // Логин или почта
+    // Пароль
+    QString name = ui->name->text();
+    QString password = ui->password->text();
 
     web->auth(name, password);
-
-    timer->start(10000);
-
 }
 
 void AuthForm::loaderFormSlot()
@@ -158,7 +158,7 @@ void AuthForm::authFormSlot()
     this->currentForm = false;
 }
 
-void AuthForm::threadUpdate() //"http://www.w3.org/TR/REC-html40/strict.dtd"
+void AuthForm::threadUpdate()
 {
     if (web->authorized == true)
     {
@@ -418,7 +418,6 @@ void AuthForm::on_startButton_clicked()
 
 }
 
-
 void AuthForm::on_exitButton_clicked()
 {
     timer->stop();
@@ -430,8 +429,6 @@ void AuthForm::on_exitButton_clicked()
     ui->authWidget->setVisible(true);
     this->currentForm = false;
 }
-
-
 
 void AuthForm::on_steamButton_clicked()
 {
@@ -466,8 +463,6 @@ void AuthForm::on_launcherButton_clicked()
 
     AuthForm::loadingPartitionSettings();
 }
-
-
 
 void AuthForm::on_aimButton_clicked()
 {
@@ -552,9 +547,6 @@ void AuthForm::on_miscButton_clicked()
     ui->aimButton->setStyleSheet(" QPushButton { background: #22252A; color: #8a8d93; }  QPushButton:hover { border-bottom: 2px solid #E20048; background: #22252A; color: #fff; } ");
     ui->settingButton->setStyleSheet(" QPushButton { background: #22252A; color: #8a8d93; }  QPushButton:hover { border-bottom: 2px solid #E20048; background: #22252A; color: #fff; } ");
 }
-
-
-
 
 void AuthForm::on_aimASwitch_clicked()
 {
@@ -710,7 +702,6 @@ void AuthForm::on_noRecoilSwitch_clicked()
     threads->section[threads->typeGame].weaponSetting.isNoRecoil = check;
 }
 
-
 void AuthForm::on_freezeSwitch_clicked()
 {
     static bool check = false;
@@ -742,12 +733,6 @@ void AuthForm::on_colorRDButton_clicked()
     }
 }
 
-union IntFloat {
-  uint32_t i;
-  float f;
-};
-union IntFloat val;
-
 void AuthForm::on_rangeShovelsSlider_sliderMoved(int position)
 {
      threads->section[threads->typeGame].weaponSetting.isRangeShovels = true;
@@ -775,7 +760,6 @@ void AuthForm::on_rangeShovelsSlider_sliderMoved(int position)
          if (position == 20)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xA0\x41";
      }
 }
-
 
 void AuthForm::on_smoothnessSlider_sliderMoved(int position)
 {
@@ -814,7 +798,6 @@ void AuthForm::on_colorRadiusButton_clicked()
     }
 }
 
-
 void AuthForm::on_box3DSwitch_clicked()
 {
     static bool check = false;
@@ -847,7 +830,6 @@ void AuthForm::on_settingButton_clicked()
     ui->miscButton->setStyleSheet(" QPushButton { background: #22252A; color: #8a8d93; }  QPushButton:hover { border-bottom: 2px solid #E20048; background: #22252A; color: #fff; } ");
 }
 
-
 void AuthForm::on_loadButtonSetting_clicked()
 {
     this->loadSetting = 0;
@@ -859,7 +841,6 @@ void AuthForm::on_loadButtonSetting2_clicked()
     this->loadSetting = 1;
     web->load(web->name);
 }
-
 
 void AuthForm::on_saveButtonSetting_clicked()
 {

@@ -112,6 +112,8 @@ void website::readyRead()
         QJsonObject root = document.object();
 
 
+
+
         root = deleted.object();
     }
     else
@@ -175,23 +177,19 @@ void website::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthentic
 //    qInfo() << "proxyAuthenticationRequired";
 }
 
-void website::auth(string login, string pass)
+void website::auth(QString login, QString pass)
 {
     if (login == "" || pass == "")return;
 
     QByteArray data;
-    data.append("authForm=1");
-    data.append("&login="+Encryption(QString::fromStdString(login)));
-    data.append("&pass="+Encryption(QString::fromStdString(pass)));
-    data.append("&hwid="+Encryption(ToolsHack::GetHWID()));
-    data.append("&device=pc");
+    data.append("auth=1");
+    data.append("&login="+login);
+    data.append("&pass="+pass);
+    data.append("&hwid="+ToolsHack::GetHWID());
 
 
-    this->post("https://shredhack.ru/auth.php/", data);
-    this->getHTML("https://shredhack.ru/update-log.php/");
-
-//    string strData = "authForm=1&login="+login+"&pass="+pass;
-
+    this->post("https://shredhack.ru/api/api.php", data);
+//    this->getHTML("https://shredhack.ru/update-log.php/");
 }
 
 void website::load(QString login)
@@ -203,8 +201,6 @@ void website::load(QString login)
 
     this->post("https://shredhack.ru/setting.php/", data);
 }
-
-
 
 void website::save(QString login)
 {
@@ -245,4 +241,3 @@ void website::save(QString login)
 
     this->post("https://shredhack.ru/setting.php/", data);
 }
-

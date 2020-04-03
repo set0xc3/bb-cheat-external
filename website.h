@@ -43,7 +43,7 @@ public slots:
     void get(QString location);
     void getHTML(QString location);
     void post(QString location, QByteArray data);
-    void auth(string login, string pass);
+    void auth(QString login, QString pass);
     void load(QString login);
     void save(QString login);
 
