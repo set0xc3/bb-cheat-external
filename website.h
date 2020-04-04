@@ -11,8 +11,11 @@
 #include <QString>
 #include <iostream>
 #include <thread>
+
 #include "authform.h"
 #include "threads.h"
+#include "toolshack.h"
+#include "cipher.h"
 
 
 using namespace std;
@@ -35,6 +38,20 @@ public:
     QString name = "";
     QString day = "";
     bool authorized = false;
+
+
+    struct UserData
+    {
+        QByteArray day;
+        QByteArray name;
+        QByteArray version;
+        QByteArray versionBuff = "v10.3";
+        QByteArray commands;
+
+        int status = 0;
+        bool authorized = false;
+    };
+    UserData userData;
 
 public:
     AuthForm *authForm;

@@ -1,9 +1,4 @@
 #include "website.h"
-#include "authform.h"
-#include "toolshack.h"
-#include "cipher.h"
-
-
 
 
 website::website(QObject *parent) : QObject(parent)
@@ -48,68 +43,6 @@ void website::post(QString location, QByteArray data)
     connect(reply, &QNetworkReply::finished, this, &website::readyRead);
 }
 
-//  Зашифровать
-QByteArray Encryption(QString name)
-{
-    if (QString(name.toUtf8()) == "")return QByteArray();
-
-    QByteArray plan = QString(name).toUtf8();
-
-    QByteArray testPrivateKey = GetCipher::getPrivateKey();
-    QByteArray testPublicKey = GetCipher::getPublicKey();
-
-    RSA* publickey = GetCipher::getPublicKey(testPublicKey);
-
-    QByteArray encrypted = GetCipher::encryptRSA(publickey, plan);
-
-    return encrypted.toBase64();
-}
-
-// Дешифровать
-QByteArray Decrypted(QJsonObject root, QString name)
-{
-    QByteArray testPrivateKey = GetCipher::getPrivateKey();
-    QByteArray testPublicKey = GetCipher::getPublicKey();
-    RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
-
-    QByteArray encrypted = QString(root.value(name).toString()).toUtf8();
-    encrypted = encrypted.fromBase64(encrypted);
-    QByteArray decrypted = GetCipher::decryptRSA(privatekey, encrypted);
-
-    return decrypted;
-}
-
-// Дешифровать
-QByteArray Decrypted(QByteArray name)
-{
-    QByteArray testPrivateKey = GetCipher::getPrivateKey();
-    QByteArray testPublicKey = GetCipher::getPublicKey();
-    RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
-
-    QByteArray de = name; de = de.fromBase64(de);
-    QByteArray decrypted = GetCipher::decryptRSA(privatekey, de);
-
-    return decrypted;
-}
-
-// Дешифровать
-QByteArray DecryptedToObject(QJsonObject root, QString type, QString name)
-{
-    if (QString(root[type].toObject()[name].toString()).toUtf8() == "")return QByteArray();
-
-    QByteArray testPrivateKey = GetCipher::getPrivateKey();
-    QByteArray testPublicKey = GetCipher::getPublicKey();
-    RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
-
-    QByteArray encrypted = QString(root[type].toObject()[name].toString()).toUtf8();
-//    qDebug() << encrypted;
-
-    encrypted = encrypted.fromBase64(encrypted);
-    QByteArray decrypted = GetCipher::decryptRSA(privatekey, encrypted);
-
-    return decrypted;
-}
-
 void website::readyRead()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
@@ -128,21 +61,68 @@ void website::readyRead()
             {
                 if (root[root.keys().at(i)] == 0) // Если auth
                 {
+
                     for (int g = 0; g< root.keys().count(); g++)
                     {
-                        if (root.keys().at(g) == "authorized")  // Если авторизованы
+                        if (root.keys().at(g) == "version")
                         {
                             QJsonValue authorized = root[root.keys().at(g)];
+                            QString s_data = authorized.toString();
+                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
+                            this->userData.version = b_data;
 
+                            // Если вышла обнова, то говорим пользователю обновитья
+                            if (GetCipher::Decrypted(b_data) != this->userData.versionBuff) this->userData.status = 1;
+
+                            continue;
+                        }
+
+                        if (root.keys().at(g) == "day")
+                        {
+                            QJsonValue authorized = root[root.keys().at(g)];
+                            QString s_data = authorized.toString();
+                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+
+                            this->userData.day = b_data;
+
+                            // Если у ползователья закончелись дни
+                            if (GetCipher::Decrypted(b_data) != "0") this->userData.authorized = true;
+                            else this->userData.authorized = false;
+
+                            continue;
+                        }
+
+                        if (root.keys().at(g) == "name")
+                        {
+                            QJsonValue authorized = root[root.keys().at(g)];
+                            QString s_data = authorized.toString();
+                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+
+                            this->userData.name = b_data;
+
+                            continue;
+                        }
+
+                        if (root.keys().at(g) == "commands")
+                        {
+                            QJsonValue authorized = root[root.keys().at(g)];
+                            QString s_data = authorized.toString();
+                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+
+                            this->userData.commands = b_data;
+
+                            if (GetCipher::Decrypted(b_data) == "0") this->userData.status = 2;
+
+                            continue;
                         }
                     }
-                }
 
+                    emit loaderFormSignal();
+                }
                 break;
             }
         }
-
 
 //        QByteArray reqArray = Decrypted(root, "authorized");
 
@@ -157,7 +137,6 @@ void website::readyRead()
 //            emit loaderFormSignal();
 //        }
 
-
         root = deleted.object();
     }
     else
@@ -167,10 +146,10 @@ void website::readyRead()
     reply->deleteLater();
 }
 
-static bool buff = true;
+
 void website::readyReadHTML()
 {
-//    qInfo() << "ReadyReadHTML";
+    static bool buff = true;
 
    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
    if (reply->error() == QNetworkReply::NoError)
@@ -227,9 +206,9 @@ void website::auth(QString login, QString pass)
 
     QByteArray data;
     data.append("auth=1");
-    data.append("&login="+Encryption(login));
-    data.append("&password="+Encryption(pass));
-    data.append("&hwid="+Encryption(ToolsHack::GetHWID()));
+    data.append("&login="+GetCipher::Encryption(login));
+    data.append("&password="+GetCipher::Encryption(pass));
+    data.append("&hwid="+GetCipher::Encryption(ToolsHack::GetHWID()));
 
 
     this->post("https://shredhack.ru/api/api.php", data);
@@ -238,50 +217,50 @@ void website::auth(QString login, QString pass)
 
 void website::load(QString login)
 {
-    QByteArray data;
-    data.append("setting=1");
-    data.append("&login="+Encryption(login));
-    data.append("&device=pc");
+//    QByteArray data;
+//    data.append("setting=1");
+//    data.append("&login="+Encryption(login));
+//    data.append("&device=pc");
 
-    this->post("https://shredhack.ru/setting.php/", data);
+//    this->post("https://shredhack.ru/setting.php/", data);
 }
 
 void website::save(QString login)
 {
-    QString slogin = Encryption(login);
-//    qDebug() << slogin;
+//    QString slogin = Encryption(login);
+////    qDebug() << slogin;
 
-    QByteArray data;
-    data.append("setting=2");
-    data.append("&login="+slogin);
-    data.append("&device=pc");
+//    QByteArray data;
+//    data.append("setting=2");
+//    data.append("&login="+slogin);
+//    data.append("&device=pc");
 
-    data.append("&type_game="+Encryption(QString::number(this->authForm->loadSetting)));
-    data.append("&aim_bone="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.bone)));
-    data.append("&aim_color="+Encryption(this->threads->section[this->authForm->loadSetting].aimSetting.colorRadius.name()));
-    data.append("&aim_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isActive)));
-    data.append("&aim_isradius="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isRadius)));
-    data.append("&aim_radius="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.radius)));
-    data.append("&aim_smooth="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.smoothness)));
+//    data.append("&type_game="+Encryption(QString::number(this->authForm->loadSetting)));
+//    data.append("&aim_bone="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.bone)));
+//    data.append("&aim_color="+Encryption(this->threads->section[this->authForm->loadSetting].aimSetting.colorRadius.name()));
+//    data.append("&aim_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isActive)));
+//    data.append("&aim_isradius="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isRadius)));
+//    data.append("&aim_radius="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.radius)));
+//    data.append("&aim_smooth="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.smoothness)));
 
-    data.append("&esp_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isActive)));
-    data.append("&esp_color="+Encryption(this->threads->section[this->authForm->loadSetting].espSetting.colorRD.name()));
-    data.append("&esp_is2dbox="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isBox)));
-    data.append("&esp_is3dbox="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.is3DBox)));
-    data.append("&esp_ishealth="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isHealth)));
-    data.append("&esp_isline="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isOutline)));
-    data.append("&esp_isname="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isName)));
-    data.append("&esp_isprotection="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isArmor)));
+//    data.append("&esp_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isActive)));
+//    data.append("&esp_color="+Encryption(this->threads->section[this->authForm->loadSetting].espSetting.colorRD.name()));
+//    data.append("&esp_is2dbox="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isBox)));
+//    data.append("&esp_is3dbox="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.is3DBox)));
+//    data.append("&esp_ishealth="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isHealth)));
+//    data.append("&esp_isline="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isOutline)));
+//    data.append("&esp_isname="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isName)));
+//    data.append("&esp_isprotection="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isArmor)));
 
-    data.append("&misc_isfreeze="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isFreezing)));
-    data.append("&misc_isunhookcamera="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isUnhookCamera)));
+//    data.append("&misc_isfreeze="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isFreezing)));
+//    data.append("&misc_isunhookcamera="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isUnhookCamera)));
 
-    data.append("&weapon_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isActive)));
-    data.append("&weapon_isautomatic="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isAutomaticWeapon)));
-    data.append("&weapon_isinfiniteammo="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isInfiniteAmmo)));
-    data.append("&weapon_isnorecoil="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isNoRecoil)));
-    data.append("&weapon_rangeshovels="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.rangeShovels)));
+//    data.append("&weapon_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isActive)));
+//    data.append("&weapon_isautomatic="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isAutomaticWeapon)));
+//    data.append("&weapon_isinfiniteammo="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isInfiniteAmmo)));
+//    data.append("&weapon_isnorecoil="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isNoRecoil)));
+//    data.append("&weapon_rangeshovels="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.rangeShovels)));
 
 
-    this->post("https://shredhack.ru/setting.php/", data);
+//    this->post("https://shredhack.ru/setting.php/", data);
 }

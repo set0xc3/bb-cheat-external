@@ -26,8 +26,6 @@ AuthForm::AuthForm(QWidget *parent) :
     QtAwesome* awesome = new QtAwesome( qApp );
     awesome->initFontAwesome();
 
-    web->authForm = this;
-    web->threads = threads;
 
     // Выключаем кнопку
     ui->infiniteAmmoSwitch->setVisible(false);
@@ -46,6 +44,9 @@ AuthForm::AuthForm(QWidget *parent) :
     ui->steam_icon->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     ui->launcher_icon->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
+
+    web->authForm = this;
+    web->threads = threads;
 
     connect(web, SIGNAL(loaderFormSignal()), this, SLOT(loaderFormSlot()));
     connect(web, SIGNAL(loadSettingSignal()), this, SLOT(loadSettingSlot()));
@@ -85,6 +86,9 @@ void AuthForm::loaderFormSlot()
 {
     ui->authWidget->setVisible(false);
     this->currentForm = true;
+
+    ui->nameLabel->setText(web->userData.name);
+    ui->remained->setText("Осталось: "+GetCipher::Decrypted(web->userData.day)+" Дней");
 
     qDebug() << "loaderFormSignal()";
 }

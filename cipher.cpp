@@ -234,3 +234,61 @@ void Cipher::finelize()
     EVP_cleanup();
     ERR_free_strings();
 }
+
+QByteArray GetCipher::Encryption(QString name)
+{
+    if (QString(name.toUtf8()) == "")return QByteArray();
+
+    QByteArray plan = QString(name).toUtf8();
+
+    QByteArray testPrivateKey = GetCipher::getPrivateKey();
+    QByteArray testPublicKey = GetCipher::getPublicKey();
+
+    RSA* publickey = GetCipher::getPublicKey(testPublicKey);
+
+    QByteArray encrypted = GetCipher::encryptRSA(publickey, plan);
+
+    return encrypted.toBase64();
+}
+
+QByteArray GetCipher::Decrypted(QJsonObject root, QString name)
+{
+    QByteArray testPrivateKey = GetCipher::getPrivateKey();
+    QByteArray testPublicKey = GetCipher::getPublicKey();
+    RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
+
+    QByteArray encrypted = QString(root.value(name).toString()).toUtf8();
+    encrypted = encrypted.fromBase64(encrypted);
+    QByteArray decrypted = GetCipher::decryptRSA(privatekey, encrypted);
+
+    return decrypted;
+}
+
+QByteArray GetCipher::Decrypted(QByteArray name)
+{
+    QByteArray testPrivateKey = GetCipher::getPrivateKey();
+    QByteArray testPublicKey = GetCipher::getPublicKey();
+    RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
+
+    QByteArray de = name; de = de.fromBase64(de);
+    QByteArray decrypted = GetCipher::decryptRSA(privatekey, de);
+
+    return decrypted;
+}
+
+QByteArray GetCipher::DecryptedToObject(QJsonObject root, QString type, QString name)
+{
+    if (QString(root[type].toObject()[name].toString()).toUtf8() == "")return QByteArray();
+
+    QByteArray testPrivateKey = GetCipher::getPrivateKey();
+    QByteArray testPublicKey = GetCipher::getPublicKey();
+    RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
+
+    QByteArray encrypted = QString(root[type].toObject()[name].toString()).toUtf8();
+
+    encrypted = encrypted.fromBase64(encrypted);
+    QByteArray decrypted = GetCipher::decryptRSA(privatekey, encrypted);
+
+    return decrypted;
+}
+

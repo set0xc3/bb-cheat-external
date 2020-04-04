@@ -2,6 +2,7 @@
 #define CIPHER_H
 
 #include <QDebug>
+#include <QObject>
 #include <openssl/rsa.h>
 #include <openssl/engine.h>
 #include <openssl/pem.h>
@@ -15,13 +16,14 @@
 #include <openssl/sha.h>
 #include <openssl/md5.h>
 
+#include "website.h"
+
 #define PADDING RSA_PKCS1_PADDING
 #define KEYSIZE 32
 #define IVSIZE 32
 #define BLOCKSIZE 256
 #define SALTSIZE 8
 
-#include <QObject>
 
 class Cipher : QObject
 {
@@ -49,6 +51,19 @@ namespace GetCipher
 
     QByteArray getPublicKey();
     QByteArray getPrivateKey();
+
+
+    //  Зашифровать
+    QByteArray Encryption(QString name);
+
+    // Дешифровать
+    QByteArray Decrypted(QJsonObject root, QString name);
+
+    // Дешифровать
+    QByteArray Decrypted(QByteArray name);
+
+    // Дешифровать
+    QByteArray DecryptedToObject(QJsonObject root, QString type, QString name);
 }
 
 #endif // CIPHER_H
