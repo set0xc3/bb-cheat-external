@@ -97,28 +97,27 @@ QString DecryptedToObject(QJsonObject root, QString type, QString name)
 
 void website::readyRead()
 {
-//     qInfo() << "ReadyRead";
-
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     if (reply->error() == QNetworkReply::NoError)
     {
-//        QByteArray content= reply->readAll();
-//        QTextCodec *codec = QTextCodec::codecForName("cp1251");
-
-
         // То создаём объект Json Document, считав в него все данные из ответа
         QJsonDocument deleted;
         QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
         QJsonObject root = document.object();
 
 
+        QJsonValue authorized = root.value("authorized");
+        if (authorized.toInt() == 1)
+        {
+            emit loaderFormSignal();
+        }
 
 
         root = deleted.object();
     }
     else
     {
-//        qDebug()<< reply->errorString();
+
     }
     reply->deleteLater();
 }
@@ -184,7 +183,7 @@ void website::auth(QString login, QString pass)
     QByteArray data;
     data.append("auth=1");
     data.append("&login="+login);
-    data.append("&pass="+pass);
+    data.append("&password="+pass);
     data.append("&hwid="+ToolsHack::GetHWID());
 
 

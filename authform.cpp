@@ -94,56 +94,7 @@ void AuthForm::on_loginButton_clicked()
 
 void AuthForm::loaderFormSlot()
 {
-    if(web->day == "0"){
-        if(timer->isActive() == false)timer->stop();
-        threads->isActive = false;
-    }
-
-    if (web->name == "parsecffo" || web->name == "Galiapische" || web->name == "KLADMAYR")
-    {
-        ui->infiniteAmmoSwitch->setVisible(true);
-        ui->label_30->setVisible(true);
-    }
-
-    if(ui->updatelogText->toMarkdown() == "")ui->updatelogText->setHtml(web->updatelog);
-    if(web->buffupdatelog != web->updatelog){
-        ui->updatelogText->setHtml(web->updatelog);
-        web->buffupdatelog = web->updatelog;
-    }
-    ui->remained->setText("Осталось: "+web->day+" Дней");
-    ui->nameLabel->setText(web->name);
-
-    if (this->currentForm == false)ui->authWidget->setVisible(false);
-    else this->currentForm = true;
-
-    if (web->version != "" && web->version != web->_version)
-    {
-        if(timer->isActive() == false)timer->stop();
-        threads->isActive = false;
-        ui->startButton->setText("Обновить");
-        ui->startButton->setStyleSheet("QPushButton { background: #4E82B1; color: #fff; }");
-        return;
-    }
-
-    if (threads->isActive == true){
-
-        //TRUE
-        ui->startButton->setStyleSheet("QPushButton { background: #E20048; color: #fff; }");
-        ui->startButton->setText("Стоп");
-    }
-    else {
-
-        //FALSE
-        ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
-        ui->startButton->setText("Запуск");
-    }
-
-    static bool loadSetting = true;
-    if (loadSetting == true)
-    {
-        AuthForm::loadingPartitionSettings();
-        loadSetting = false;
-    }
+    qDebug() << "loaderFormSignal()";
 }
 
 void AuthForm::loadSettingSlot()
@@ -162,8 +113,8 @@ void AuthForm::threadUpdate()
 {
     if (web->authorized == true)
     {
-        string name = ui->name->text().toStdString();
-        string password = ui->password->text().toStdString();
+        QString name = ui->name->text();
+        QString password = ui->password->text();
 
         web->auth(name, password);
 

@@ -2935,6 +2935,8 @@ QPushButton:hover {
     <zorder>Setting_Widget</zorder>
     <zorder>Weapon_Widget</zorder>
    </widget>
+   <zorder>mainWidget</zorder>
+   <zorder>authWidget</zorder>
   </widget>
  </widget>
  <tabstops>
