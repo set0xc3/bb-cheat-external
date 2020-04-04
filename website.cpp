@@ -116,7 +116,7 @@ void website::readyRead()
         }
 
 
-        QJsonObject reqArray = Decrypted(root, "request");
+        QByteArray reqArray = Decrypted(root, "request");
         qDebug()<< root.value("count");
 
 
