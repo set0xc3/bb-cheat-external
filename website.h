@@ -49,6 +49,7 @@ public:
         QByteArray commands;
 
         int status = 0;
+        int typeGame = -1;
         bool authorized = false;
     };
     UserData userData;
@@ -62,8 +63,11 @@ public slots:
     void getHTML(QString location);
     void post(QString location, QByteArray data);
     void auth(QString login, QString pass);
-    void load(QString login);
-    void save(QString login);
+    void load(QString typegame);
+    void save(QString typegame);
+
+private:
+    void loadSetting(QJsonObject root);
 
 private slots:
     void readyRead();

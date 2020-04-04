@@ -90,6 +90,7 @@ void AuthForm::loaderFormSlot()
     ui->nameLabel->setText(web->userData.name);
     ui->remained->setText("Осталось: "+GetCipher::Decrypted(web->userData.day)+" Дней");
 
+
     qDebug() << "loaderFormSignal()";
 }
 
@@ -368,6 +369,7 @@ void AuthForm::on_exitButton_clicked()
 {
     timer->stop();
     threads->isActive = false;
+    web->userData.authorized = false;
 
     ui->startButton->setStyleSheet("QPushButton { background: #E20048; color: #fff; }");
     ui->startButton->setText("Стоп");
@@ -779,25 +781,25 @@ void AuthForm::on_settingButton_clicked()
 void AuthForm::on_loadButtonSetting_clicked()
 {
     this->loadSetting = 0;
-    web->load(web->name);
+    web->load("0");
 }
 
 void AuthForm::on_loadButtonSetting2_clicked()
 {
     this->loadSetting = 1;
-    web->load(web->name);
+    web->load("1");
 }
 
 void AuthForm::on_saveButtonSetting_clicked()
 {
     this->loadSetting = 0;
-    web->save(web->name);
+    web->save(0);
 }
 
 void AuthForm::on_saveButtonSetting2_clicked()
 {
     this->loadSetting = 1;
-    web->save(web->name);
+    web->save("1");
 }
 
 void AuthForm::on_clearButtonSetting_clicked()

@@ -43,6 +43,51 @@ void website::post(QString location, QByteArray data)
     connect(reply, &QNetworkReply::finished, this, &website::readyRead);
 }
 
+void website::loadSetting(QJsonObject root)
+{
+    // type_game
+    {
+        QJsonValue authorized = root["type_game"];
+        QString s_data = authorized.toString();
+        QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+
+        this->userData.typeGame = b_data.toInt();
+    }
+
+    //LoadSetting
+    {
+        int i = this->userData.typeGame;
+        this->threads->section[i].aimSetting.isActive = root["aim_isactive"].toString().toInt();
+        this->threads->section[i].aimSetting.isRadius = root["aim_isradius"].toString().toInt();
+        this->threads->section[i].aimSetting.bone = root["aim_bone"].toString().toInt();
+        this->threads->section[i].aimSetting.smoothness = root["aim_smooth"].toString().toInt();
+
+        this->threads->section[i].aimSetting.radius = root["aim_radius"].toString().toInt();
+        this->threads->section[i].aimSetting.colorRadius = root["aim_color"].toString();
+
+        this->threads->section[i].espSetting.isActive = root["esp_isactive"].toString().toInt();
+        this->threads->section[i].espSetting.colorRD = root["esp_color"].toString();
+        this->threads->section[i].espSetting.isBox = root["esp_is2dbox"].toString().toInt();
+        this->threads->section[i].espSetting.is3DBox = root["esp_is3dbox"].toString().toInt();
+        this->threads->section[i].espSetting.isOutline = root["esp_isline"].toString().toInt();
+        this->threads->section[i].espSetting.isName = root["esp_isname"].toString().toInt();
+        this->threads->section[i].espSetting.isHealth = root["esp_ishealth"].toString().toInt();
+        this->threads->section[i].espSetting.isArmor = root["esp_isprotection"].toString().toInt();
+
+        this->threads->section[i].weaponSetting.isActive = root["weapon_isactive"].toString().toInt();
+        this->threads->section[i].weaponSetting.isInfiniteAmmo = root["weapon_isinfiniteammo"].toString().toInt();
+        this->threads->section[i].weaponSetting.isAutomaticWeapon = root["weapon_isautomatic"].toString().toInt();
+        this->threads->section[i].weaponSetting.isNoRecoil = root["weapon_isnorecoil"].toString().toInt();
+        this->threads->section[i].weaponSetting.rangeShovels = root["weapon_rangeshovels"].toString().toInt();
+
+        this->threads->section[i].miscSetting.isUnhookCamera = root["misc_isunhookcamera"].toString().toInt();
+        this->threads->section[i].miscSetting.isFreezing = root["misc_isfreeze"].toString().toInt();
+
+        emit loadSettingSignal();
+    }
+
+}
+
 void website::readyRead()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
@@ -53,89 +98,76 @@ void website::readyRead()
         QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
         QJsonObject root = document.object();
 
-        // Находим type
-        for (int i =0; i <  root.keys().count(); i++)
+        if (root["type"] == 0)
         {
-            // 0 - auth, 1 - load, 2 - save
-            if (root.keys().at(i) == "type")
+            //-- version
             {
-                if (root[root.keys().at(i)] == 0) // Если auth
-                {
+                QJsonValue authorized = root["version"];
+                QString s_data = authorized.toString();
+                QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
-                    for (int g = 0; g< root.keys().count(); g++)
-                    {
-                        if (root.keys().at(g) == "version")
-                        {
-                            QJsonValue authorized = root[root.keys().at(g)];
-                            QString s_data = authorized.toString();
-                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+                this->userData.version = b_data;
 
-                            this->userData.version = b_data;
+                // Если вышла обнова, то говорим пользователю обновитья
+                if (GetCipher::Decrypted(b_data) != this->userData.versionBuff) this->userData.status = 1;
+            }
 
-                            // Если вышла обнова, то говорим пользователю обновитья
-                            if (GetCipher::Decrypted(b_data) != this->userData.versionBuff) this->userData.status = 1;
+            //-- day
+            {
+                QJsonValue authorized = root["day"];
+                QString s_data = authorized.toString();
+                QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
-                            continue;
-                        }
+                this->userData.day = b_data;
 
-                        if (root.keys().at(g) == "day")
-                        {
-                            QJsonValue authorized = root[root.keys().at(g)];
-                            QString s_data = authorized.toString();
-                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+                // Если у ползователья закончелись дни
+                if (GetCipher::Decrypted(b_data) != "0") this->userData.authorized = true;
+                else this->userData.authorized = false;
+            }
 
-                            this->userData.day = b_data;
+            //-- name
+            {
+                QJsonValue authorized = root["name"];
+                QString s_data = authorized.toString();
+                QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
-                            // Если у ползователья закончелись дни
-                            if (GetCipher::Decrypted(b_data) != "0") this->userData.authorized = true;
-                            else this->userData.authorized = false;
+                this->userData.name = b_data;
+            }
 
-                            continue;
-                        }
+            //-- commands
+            {
+                QJsonValue authorized = root["commands"];
+                QString s_data = authorized.toString();
+                QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
-                        if (root.keys().at(g) == "name")
-                        {
-                            QJsonValue authorized = root[root.keys().at(g)];
-                            QString s_data = authorized.toString();
-                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+                this->userData.commands = b_data;
 
-                            this->userData.name = b_data;
+                if (GetCipher::Decrypted(b_data) == "0") this->userData.status = 2;
+            }
 
-                            continue;
-                        }
-
-                        if (root.keys().at(g) == "commands")
-                        {
-                            QJsonValue authorized = root[root.keys().at(g)];
-                            QString s_data = authorized.toString();
-                            QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
-
-                            this->userData.commands = b_data;
-
-                            if (GetCipher::Decrypted(b_data) == "0") this->userData.status = 2;
-
-                            continue;
-                        }
-                    }
-
-                    emit loaderFormSignal();
-                }
-                break;
+            if (this->userData.authorized == true) // Если ползователь авторизован
+            {
+                emit loaderFormSignal();
+                this->load("0"); // Получаем настройки пользователя - launcher
+                this->load("1"); // Получаем настройки пользователя - steam
             }
         }
 
-//        QByteArray reqArray = Decrypted(root, "authorized");
+        if (root["type"] == 1)
+        {
+            loadSetting(root);
+        }
 
-        // parsecffo
-        // 2997teach
+//         print out the list of keys ("count")
+//               QStringList keys = root.keys();
+//               foreach(QString key, keys)
+//               {
+//                   qDebug() << key;
+//               }
 
+//         parsecffo
+//         2997teach
 
-//        qDebug() << root.keys();
-//        QJsonValue authorized = root.value("authorized");
-//        if (authorized.toInt() == 1)
-//        {
-//            emit loaderFormSignal();
-//        }
 
         root = deleted.object();
     }
@@ -215,17 +247,17 @@ void website::auth(QString login, QString pass)
 //    this->getHTML("https://shredhack.ru/update-log.php/");
 }
 
-void website::load(QString login)
+void website::load(QString typegame)
 {
-//    QByteArray data;
-//    data.append("setting=1");
-//    data.append("&login="+Encryption(login));
-//    data.append("&device=pc");
+    QByteArray data;
+    data.append("loadsetting=1");
+    data.append("&login="+this->userData.name);
+    data.append("&typegame="+typegame);
 
-//    this->post("https://shredhack.ru/setting.php/", data);
+    this->post("https://shredhack.ru/api/api.php", data);
 }
 
-void website::save(QString login)
+void website::save(QString typegame)
 {
 //    QString slogin = Encryption(login);
 ////    qDebug() << slogin;
@@ -262,5 +294,6 @@ void website::save(QString login)
 //    data.append("&weapon_rangeshovels="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.rangeShovels)));
 
 
-//    this->post("https://shredhack.ru/setting.php/", data);
+    //    this->post("https://shredhack.ru/setting.php/", data);
 }
+

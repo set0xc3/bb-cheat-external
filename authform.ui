@@ -710,7 +710,7 @@ QPushButton:hover {
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Осталось: 30 Дней</string>
+      <string>Осталось: N Дней</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -2932,8 +2932,8 @@ QPushButton:hover {
     <zorder>ESP_Widget</zorder>
     <zorder>startButton</zorder>
     <zorder>Aim_Widget</zorder>
-    <zorder>Setting_Widget</zorder>
     <zorder>Weapon_Widget</zorder>
+    <zorder>Setting_Widget</zorder>
    </widget>
    <zorder>mainWidget</zorder>
    <zorder>authWidget</zorder>
