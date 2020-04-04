@@ -47,6 +47,7 @@ void website::post(QString location, QByteArray data)
     connect(reply, &QNetworkReply::finished, this, &website::readyRead);
 }
 
+//  Зашифровать
 QString Encryption(QString name)
 {
     if (QString(name.toUtf8()) == "")return QByteArray();
@@ -63,6 +64,7 @@ QString Encryption(QString name)
     return QString(encrypted.toBase64()).toUtf8();
 }
 
+// Дешифровать
 QString Decrypted(QJsonObject root, QString name)
 {
     if (QString(root.value(name).toString()).toUtf8() == "")return QByteArray();
@@ -78,6 +80,7 @@ QString Decrypted(QJsonObject root, QString name)
     return QString(decrypted).toUtf8();
 }
 
+// Дешифровать
 QString DecryptedToObject(QJsonObject root, QString type, QString name)
 {
     if (QString(root[type].toObject()[name].toString()).toUtf8() == "")return QByteArray();
@@ -106,11 +109,17 @@ void website::readyRead()
         QJsonObject root = document.object();
 
 
-        QJsonValue authorized = root.value("authorized");
-        if (authorized.toInt() == 1)
-        {
-            emit loaderFormSignal();
-        }
+        qDebug() << Decrypted(root, "request");
+
+        QJsonValue jv = Decrypted(root, "request");
+
+
+//        qDebug() << root.keys();
+//        QJsonValue authorized = root.value("authorized");
+//        if (authorized.toInt() == 1)
+//        {
+//            emit loaderFormSignal();
+//        }
 
 
         root = deleted.object();
@@ -182,9 +191,9 @@ void website::auth(QString login, QString pass)
 
     QByteArray data;
     data.append("auth=1");
-    data.append("&login="+login);
-    data.append("&password="+pass);
-    data.append("&hwid="+ToolsHack::GetHWID());
+    data.append("&login="+Encryption(login));
+    data.append("&password="+Encryption(pass));
+    data.append("&hwid="+Encryption(ToolsHack::GetHWID()));
 
 
     this->post("https://shredhack.ru/api/api.php", data);

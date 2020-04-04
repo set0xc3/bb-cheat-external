@@ -26,22 +26,20 @@ AuthForm::AuthForm(QWidget *parent) :
     QtAwesome* awesome = new QtAwesome( qApp );
     awesome->initFontAwesome();
 
+    web->authForm = this;
+    web->threads = threads;
 
+    // Выключаем кнопку
     ui->infiniteAmmoSwitch->setVisible(false);
     ui->label_30->setVisible(false);
 
-//    QVariantMap options;
-//    options.insert( "color" , QColor(255,255,255) );
-//    Затем создайте свой значок с помощью перечисления значков (без черточек):
-//    ui->homeButton->setIcon( awesome->icon( "home"));
+
     ui->homeButton->setText(QChar( fa::youtubeplay ) );
     ui->homeButton->setFont( awesome->font(25) );
 
-//    ui->vkButton->setIcon( awesome->icon( "vk"));
     ui->vkButton->setText(QChar( fa::vk ) );
     ui->vkButton->setFont( awesome->font(25) );
 
-//    ui->exitButton->setIcon( awesome->icon( "signout"));
     ui->exitButton->setText(QChar( fa::signout) );
     ui->exitButton->setFont( awesome->font(25) );
 
@@ -49,24 +47,15 @@ AuthForm::AuthForm(QWidget *parent) :
     ui->launcher_icon->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
 
-    //ui->label_2->setText(QChar( fa::home ) );
-    //ui->label_2->setFont( awesome->font(16) );
-
-
-    web->authForm = this;
-    web->threads = threads;
-    connect(this, SIGNAL(authFormSignal()), this, SLOT(authFormSlot()));
     connect(web, SIGNAL(loaderFormSignal()), this, SLOT(loaderFormSlot()));
     connect(web, SIGNAL(loadSettingSignal()), this, SLOT(loadSettingSlot()));
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(threadUpdate()));
 
-    if (this->currentForm == false) emit authFormSignal();
 
     threads->start(QThread::TimeCriticalPriority);
     threadMem->start(QThread::TimeCriticalPriority); //QThread::HighestPriority
-
 
 
     ui->Aim_Widget->setVisible(false);
@@ -94,6 +83,9 @@ void AuthForm::on_loginButton_clicked()
 
 void AuthForm::loaderFormSlot()
 {
+    ui->authWidget->setVisible(false);
+    this->currentForm = true;
+
     qDebug() << "loaderFormSignal()";
 }
 
@@ -104,7 +96,6 @@ void AuthForm::loadSettingSlot()
 
 void AuthForm::authFormSlot()
 {
-//    ui->mainWidget->setVisible(false);
     ui->authWidget->setVisible(true);
     this->currentForm = false;
 }

@@ -626,7 +626,7 @@ QPushButton:hover {
 </string>
      </property>
      <property name="text">
-      <string>Технические работы</string>
+      <string>Запуск</string>
      </property>
      <property name="autoDefault">
       <bool>false</bool>
