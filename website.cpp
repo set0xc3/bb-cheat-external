@@ -116,10 +116,8 @@ void website::readyRead()
         }
 
 
-        QByteArray reqArray = Decrypted(root, "authorized");
-
-
-        qDebug()<< reqArray;
+        QByteArray reqArray = Decrypted(root, "request");
+        qDebug()<< root.value("count");
 
 
         // parsecffo
