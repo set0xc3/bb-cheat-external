@@ -48,7 +48,7 @@ void website::post(QString location, QByteArray data)
 }
 
 //  Зашифровать
-QString Encryption(QString name)
+QByteArray Encryption(QString name)
 {
     if (QString(name.toUtf8()) == "")return QByteArray();
 
@@ -61,11 +61,11 @@ QString Encryption(QString name)
 
     QByteArray encrypted = GetCipher::encryptRSA(publickey, plan);
 
-    return QString(encrypted.toBase64()).toUtf8();
+    return encrypted.toBase64();
 }
 
 // Дешифровать
-QString Decrypted(QJsonObject root, QString name)
+QByteArray Decrypted(QJsonObject root, QString name)
 {
     if (QString(root.value(name).toString()).toUtf8() == "")return QByteArray();
 
@@ -77,11 +77,11 @@ QString Decrypted(QJsonObject root, QString name)
     encrypted = encrypted.fromBase64(encrypted);
     QByteArray decrypted = GetCipher::decryptRSA(privatekey, encrypted);
 
-    return QString(decrypted).toUtf8();
+    return decrypted;
 }
 
 // Дешифровать
-QString DecryptedToObject(QJsonObject root, QString type, QString name)
+QByteArray DecryptedToObject(QJsonObject root, QString type, QString name)
 {
     if (QString(root[type].toObject()[name].toString()).toUtf8() == "")return QByteArray();
 
@@ -95,7 +95,7 @@ QString DecryptedToObject(QJsonObject root, QString type, QString name)
     encrypted = encrypted.fromBase64(encrypted);
     QByteArray decrypted = GetCipher::decryptRSA(privatekey, encrypted);
 
-    return QString(decrypted).toUtf8();
+    return decrypted;
 }
 
 void website::readyRead()
@@ -108,10 +108,20 @@ void website::readyRead()
         QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
         QJsonObject root = document.object();
 
+        // print out the list of keys ("count")
+        QStringList keys = root.keys();
+        foreach(QString key, keys)
+        {
+            qDebug() << key;
+        }
 
-        qDebug() << Decrypted(root, "request");
 
-        QJsonValue jv = Decrypted(root, "request");
+        QJsonObject reqArray = Decrypted(root, "request");
+        qDebug()<< root.value("count");
+
+
+        // parsecffo
+        // 2997teach
 
 
 //        qDebug() << root.keys();
