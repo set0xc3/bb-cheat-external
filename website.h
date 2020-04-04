@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 #include <QAuthenticator>
 #include <QMessageBox>
+#include <QString>
 #include <iostream>
 #include <thread>
 #include "authform.h"

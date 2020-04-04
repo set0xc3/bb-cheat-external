@@ -5,6 +5,7 @@
 
 
 
+
 website::website(QObject *parent) : QObject(parent)
 {
     connect(&this->manager, &QNetworkAccessManager::authenticationRequired, this, &website::authenticationRequired);
@@ -67,8 +68,6 @@ QByteArray Encryption(QString name)
 // Дешифровать
 QByteArray Decrypted(QJsonObject root, QString name)
 {
-    if (QString(root.value(name).toString()).toUtf8() == "")return QByteArray();
-
     QByteArray testPrivateKey = GetCipher::getPrivateKey();
     QByteArray testPublicKey = GetCipher::getPublicKey();
     RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
@@ -76,6 +75,19 @@ QByteArray Decrypted(QJsonObject root, QString name)
     QByteArray encrypted = QString(root.value(name).toString()).toUtf8();
     encrypted = encrypted.fromBase64(encrypted);
     QByteArray decrypted = GetCipher::decryptRSA(privatekey, encrypted);
+
+    return decrypted;
+}
+
+// Дешифровать
+QByteArray Decrypted(QByteArray name)
+{
+    QByteArray testPrivateKey = GetCipher::getPrivateKey();
+    QByteArray testPublicKey = GetCipher::getPublicKey();
+    RSA* privatekey = GetCipher::getPrivateKey(testPrivateKey);
+
+    QByteArray de = name; de = de.fromBase64(de);
+    QByteArray decrypted = GetCipher::decryptRSA(privatekey, de);
 
     return decrypted;
 }
@@ -108,17 +120,31 @@ void website::readyRead()
         QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
         QJsonObject root = document.object();
 
-        // print out the list of keys ("count")
-        QStringList keys = root.keys();
-        foreach(QString key, keys)
+        // Находим type
+        for (int i =0; i <  root.keys().count(); i++)
         {
-            qDebug() << key;
+            // 0 - auth, 1 - load, 2 - save
+            if (root.keys().at(i) == "type")
+            {
+                if (root[root.keys().at(i)] == 0) // Если auth
+                {
+                    for (int g = 0; g< root.keys().count(); g++)
+                    {
+                        if (root.keys().at(g) == "authorized")  // Если авторизованы
+                        {
+                            QJsonValue authorized = root[root.keys().at(g)];
+
+
+                        }
+                    }
+                }
+
+                break;
+            }
         }
 
 
-        QByteArray reqArray = Decrypted(root, "request");
-        qDebug()<< root.value("count");
-
+//        QByteArray reqArray = Decrypted(root, "authorized");
 
         // parsecffo
         // 2997teach
