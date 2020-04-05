@@ -93,27 +93,37 @@ void AuthForm::loaderFormSlot()
     ui->nameLabel->setText(web->userData.name);
     ui->remained->setText("Осталось: "+GetCipher::Decrypted(web->userData.day)+" Дней");
 
+    // Если у ползователя закончились дни или пользователь вышел из аккаунта
+    if(web->userData.authorized == false)
+    {
+        threads->isActive = false;
+    }
 
     // Если вышла обновление
     if (web->userData.status == 1)
     {
+        threads->isActive = false;
+
         ui->startButton->setText("Обновить");
         ui->startButton->setStyleSheet("QPushButton { background: #4E82B1; color: #fff; }");
     }
     else if (web->userData.status == 0)
     {
-        ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
-        ui->startButton->setText("Запуск");
+        if(threads->isActive == false)
+        {
+            ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
+            ui->startButton->setText("Запуск");
+        }
     }
-
 
     // Если на сервере видутся работы
     if (web->userData.status == 2)
     {
+        threads->isActive = false;
+
         ui->startButton->setText("Тех. работы");
         ui->startButton->setStyleSheet("QPushButton { background-color: rgb(255, 132, 8); color: #fff; }");
     }
-
 
     if (web->userData.name == "parsecffo" || web->userData.name == "Galiapische" || web->userData.name == "KLADMAYR")
     {
@@ -132,6 +142,7 @@ void AuthForm::loaderFormSlot()
         ui->updatelogText->setHtml(web->updatelog);
         web->buffupdatelog = web->updatelog;
     }
+
 }
 
 void AuthForm::loadSettingSlot()
@@ -148,39 +159,6 @@ void AuthForm::authFormSlot()
 void AuthForm::threadUpdate()
 {
     web->auth(web->userData.name, GetCipher::Decrypted(web->userData.password));
-
-    // Показываем пользователю количество дней и имя
-    ui->nameLabel->setText(web->userData.name);
-    ui->remained->setText("Осталось: "+GetCipher::Decrypted(web->userData.day)+" Дней");
-
-
-    // Если вышла обновление
-    if (web->userData.status == 1)
-    {
-        ui->startButton->setText("Обновить");
-        ui->startButton->setStyleSheet("QPushButton { background: #4E82B1; color: #fff; }");
-    }
-    else if (web->userData.status == 0)
-    {
-        ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
-        ui->startButton->setText("Запуск");
-    }
-
-
-    // Если на сервере видутся работы
-    if (web->userData.status == 2)
-    {
-        ui->startButton->setText("Тех. работы");
-        ui->startButton->setStyleSheet("QPushButton { background-color: rgb(255, 132, 8); color: #fff; }");
-    }
-
-    if(ui->updatelogText->toMarkdown() == "")ui->updatelogText->setHtml(web->updatelog);
-    if(web->buffupdatelog != web->updatelog)
-    {
-        ui->updatelogText->setHtml(web->updatelog);
-        web->buffupdatelog = web->updatelog;
-    }
-
 }
 
 void AuthForm::loadingPartitionSettings()
@@ -376,11 +354,8 @@ void AuthForm::loadingPartitionSettings()
 
 void AuthForm::on_startButton_clicked()
 {
-    // Если на сервере видутся работы
-    if (web->userData.status == 2)
-    {
-        return;
-    }
+    // Если не одна из игр не выбрына
+    if (threads->typeGame == -1) return;
 
     // Если вышла обновление
     if (web->userData.status == 1)
@@ -389,14 +364,18 @@ void AuthForm::on_startButton_clicked()
         return;
     }
 
-    // Если не одна из игр не выбрына
-    if (threads->typeGame == -1) return;
-
     // Если у ползователя закончились дни или пользователь вышел из аккаунта
     if(web->userData.authorized == false)
     {
-        if(timer->isActive() == false)timer->stop();
         threads->isActive = false;
+        return;
+    }
+
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        threads->isActive = false;
+        return;
     }
 
     // Тут меняется состояние кнопки на TRUE | FALSE
@@ -421,6 +400,7 @@ void AuthForm::on_exitButton_clicked()
     timer->stop();
     threads->isActive = false;
     web->userData.authorized = false;
+    web->userData.authorized = true;
 
     ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
     ui->startButton->setText("Запуск");
@@ -844,7 +824,6 @@ void AuthForm::on_loadButtonSetting_clicked()
     {
         return;
     }
-
 
     this->loadSetting = 0;
     web->load("0");

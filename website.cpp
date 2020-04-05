@@ -98,6 +98,8 @@ void website::readyRead()
         QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
         QJsonObject root = document.object();
 
+//      qDebug() << GetCipher::Encryption("0");
+
         if (root["server"] == 1 && root["type"] == 0)
         {
             //-- version
@@ -109,8 +111,8 @@ void website::readyRead()
                 this->userData.version = b_data;
 
                 // Если вышла обнова, то говорим пользователю обновитья
-                if (GetCipher::Decrypted(b_data) != this->userData.versionBuff) this->userData.status = 1;
-                else  if (GetCipher::Decrypted(b_data) == this->userData.versionBuff) this->userData.status = 0;
+                if (GetCipher::Decrypted(b_data) != GetCipher::Decrypted(this->userData.versionBuff)) this->userData.status = 1;
+                else  if (GetCipher::Decrypted(b_data) == GetCipher::Decrypted(this->userData.versionBuff)) this->userData.status = 0;
             }
 
             //-- day
@@ -122,7 +124,7 @@ void website::readyRead()
                 this->userData.day = b_data;
 
                 // Если у ползователья закончелись дни
-                if (GetCipher::Decrypted(b_data) != "0") this->userData.authorized = true;
+                if (GetCipher::Decrypted(b_data) != GetCipher::Decrypted(this->userData.dayBuff)) this->userData.authorized = true;
                 else this->userData.authorized = false;
             }
 
@@ -141,17 +143,19 @@ void website::readyRead()
                 QString s_data = authorized.toString();
                 QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
-                this->userData.commands = b_data;
+                this->userData.servercomm = b_data;
 
                 // Если видутся работы на сервере
-                if (GetCipher::Decrypted(b_data) == "1") this->userData.status = 2;
+                if (GetCipher::Decrypted(b_data) == GetCipher::Decrypted(this->userData.servercommBuff)) this->userData.status = 2;
             }
 
-            if (this->userData.authorized == true) // Если ползователь авторизован
+            emit loaderFormSignal();
+            if (this->userData.authorizedS == true)
             {
-                emit loaderFormSignal();
                 this->load("0"); // Получаем настройки пользователя - launcher
                 this->load("1"); // Получаем настройки пользователя - steam
+
+                this->userData.authorizedS = false;
             }
         }
 

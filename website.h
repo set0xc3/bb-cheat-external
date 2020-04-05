@@ -43,15 +43,21 @@ public:
     struct UserData
     {
         QByteArray day;
+        QByteArray dayBuff = "kJRDyCLbUaSj+McYgQoHBX+CRE/6v03Zthk0Kbn7/9rLMClIAjrXKVpccZPJXwCh+FouszJr4o5auR07lfaTMngyyREu/dB2Dq4lnVONPo8RNbybgQBw7jUI85O35UwnfVsH4wltkNoo16CYT/InIWMBCX+0mAbmXcV99nG4+sgveJ4BMDfiNJen6MEPSQ+LZJeGTAiHQ8UBMIChdK4bJL05NPcobHL1bNmQCQ2ZFNRkXRAMYQ+rkuN/qYsWzlD2fdx3SFcYxIg9ubvij3sMJQFux2CI4G1GU2CXKFowJ7sFKKQgj6ywQ9vDwFkrVAfYbtaS494jLjHCCwqNX0TMeQ==";
+
         QString name;
         QByteArray password;
         QByteArray version;
-        QByteArray versionBuff = "v10.3";
-        QByteArray commands;
+        QByteArray versionBuff = "Z6GFZX4J7zlHmJcit7O75hRi0W3bqDs/+lYhgYEjg16IKns3X6a6quscXSLjCxhNLfZkm0Fblgb13AoCgIWOzMyKPn2Mhs0Dx8kYDrT6pBkHOLTJEu4SUWRw7VTxZTWYIoDJ1OPpzPfWSXd2ldeSk2IPnPS+2W9CdxWopTVQoWKnORkgswDJqhUu7QfpPR2c68mtmHAnBclrFL+8fArGINFl21tARXozyT9P84ZW7LS+/rwjPL5zivhJmTN53txTQApLMq281gipCznzwd6XUYHl7cozHoQIDvUHedjI7CsWIP8no9DtGSLUCnBM/gHilRxJ/dYZbgIFwOxy+DuQmA==";
+
+        QByteArray servercommBuff = "a/The3CW+rTkyNrMzDTtz+I/NTryxd2r/bweQTxjQaf5H9OKi0hl3Uvm/yMeDAx7STFzfqWKO0wLTAzzJriKhUcTFGZMIND6VxF5Y0BrVbk4mXdihBez7F0z/7ET0VsamHCChriuqz2Wul06Tr3pQuA4bz77MQ3vW4+9/qhcRXJKXLRX5mIxWfv2xLmuyGiiW1E/Bj+McmspcmQvaGHc9hJX++ozeugbKPP2K6ZvA0mg4KjjEOslk2GE/wXTu47fryCpHtFr6fIzMyfJhuJY5fP7hTir5RmJPNJfv52mdRudb98Xssw/LsAw0kl/eTghU5ortpgk2AL7K117Av5PLw==";
+
+        QByteArray servercomm;
 
         int status = 0;
         int typeGame = -1;
         bool authorized = false;
+        bool authorizedS = true;
     };
     UserData userData;
 
