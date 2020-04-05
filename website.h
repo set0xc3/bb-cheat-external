@@ -43,9 +43,10 @@ public:
     struct UserData
     {
         QByteArray day;
-        QByteArray name;
+        QString name;
+        QByteArray password;
         QByteArray version;
-        QByteArray versionBuff = "v10.4";
+        QByteArray versionBuff = "v10.3";
         QByteArray commands;
 
         int status = 0;

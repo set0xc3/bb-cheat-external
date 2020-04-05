@@ -110,6 +110,7 @@ void website::readyRead()
 
                 // Если вышла обнова, то говорим пользователю обновитья
                 if (GetCipher::Decrypted(b_data) != this->userData.versionBuff) this->userData.status = 1;
+                else  if (GetCipher::Decrypted(b_data) == this->userData.versionBuff) this->userData.status = 0;
             }
 
             //-- day
@@ -134,15 +135,16 @@ void website::readyRead()
                 this->userData.name = b_data;
             }
 
-            //-- commands
+            //-- servercomm
             {
-                QJsonValue authorized = root["commands"];
+                QJsonValue authorized = root["servercomm"];
                 QString s_data = authorized.toString();
                 QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
                 this->userData.commands = b_data;
 
-                if (GetCipher::Decrypted(b_data) == "0") this->userData.status = 2;
+                // Если видутся работы на сервере
+                if (GetCipher::Decrypted(b_data) == "1") this->userData.status = 2;
             }
 
             if (this->userData.authorized == true) // Если ползователь авторизован
@@ -157,7 +159,6 @@ void website::readyRead()
         {
             loadSetting(root);
         }
-
 
         root = deleted.object();
     }
@@ -231,6 +232,9 @@ void website::auth(QString login, QString pass)
     data.append("&login="+GetCipher::Encryption(login));
     data.append("&password="+GetCipher::Encryption(pass));
     data.append("&hwid="+GetCipher::Encryption(ToolsHack::GetHWID()));
+
+    this->userData.name = login;
+    this->userData.password = GetCipher::Encryption(pass);
 
 
     this->post("https://shredhack.ru/api/api.php", data);

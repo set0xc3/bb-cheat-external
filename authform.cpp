@@ -80,6 +80,8 @@ void AuthForm::on_loginButton_clicked()
     QString password = ui->password->text();
 
     web->auth(name, password);
+
+    timer->start(10000);
 }
 
 void AuthForm::loaderFormSlot()
@@ -95,14 +97,34 @@ void AuthForm::loaderFormSlot()
     // Если вышла обновление
     if (web->userData.status == 1)
     {
-        if(timer->isActive() == false)timer->stop();
-        threads->isActive = false;
         ui->startButton->setText("Обновить");
         ui->startButton->setStyleSheet("QPushButton { background: #4E82B1; color: #fff; }");
-        QDesktopServices::openUrl(QUrl("https://shredhack.ru/", QUrl::TolerantMode));
+    }
+    else if (web->userData.status == 0)
+    {
+        ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
+        ui->startButton->setText("Запуск");
     }
 
 
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        ui->startButton->setText("Тех. работы");
+        ui->startButton->setStyleSheet("QPushButton { background-color: rgb(255, 132, 8); color: #fff; }");
+    }
+
+
+    if (web->userData.name == "parsecffo" || web->userData.name == "Galiapische" || web->userData.name == "KLADMAYR")
+    {
+        ui->infiniteAmmoSwitch->setVisible(true);
+        ui->label_30->setVisible(true);
+    }
+
+    if(web->buffupdatelog != web->updatelog){
+        ui->updatelogText->setHtml(web->updatelog);
+        web->buffupdatelog = web->updatelog;
+    }
 }
 
 void AuthForm::loadSettingSlot()
@@ -118,24 +140,36 @@ void AuthForm::authFormSlot()
 
 void AuthForm::threadUpdate()
 {
-    if (web->authorized == true)
+    web->auth(web->userData.name, GetCipher::Decrypted(web->userData.password));
+
+    // Показываем пользователю количество дней и имя
+    ui->nameLabel->setText(web->userData.name);
+    ui->remained->setText("Осталось: "+GetCipher::Decrypted(web->userData.day)+" Дней");
+
+
+    // Если вышла обновление
+    if (web->userData.status == 1)
     {
-        QString name = ui->name->text();
-        QString password = ui->password->text();
-
-        web->auth(name, password);
-
-        if(web->buffupdatelog != web->updatelog){
-            ui->updatelogText->setHtml(web->updatelog);
-            web->buffupdatelog = web->updatelog;
-        }
-
+        ui->startButton->setText("Обновить");
+        ui->startButton->setStyleSheet("QPushButton { background: #4E82B1; color: #fff; }");
+    }
+    else if (web->userData.status == 0)
+    {
+        ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
+        ui->startButton->setText("Запуск");
+    }
 
 
-        if(web->day == "" || web->day == "0"){
-            if(timer->isActive() == false)timer->stop();
-            threads->isActive = false;
-        }
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        ui->startButton->setText("Тех. работы");
+        ui->startButton->setStyleSheet("QPushButton { background-color: rgb(255, 132, 8); color: #fff; }");
+    }
+
+    if(web->buffupdatelog != web->updatelog){
+        ui->updatelogText->setHtml(web->updatelog);
+        web->buffupdatelog = web->updatelog;
     }
 }
 
@@ -332,8 +366,21 @@ void AuthForm::loadingPartitionSettings()
 
 void AuthForm::on_startButton_clicked()
 {
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        return;
+    }
+
+    // Если вышла обновление
+    if (web->userData.status == 1)
+    {
+        QDesktopServices::openUrl(QUrl("https://shredhack.ru/", QUrl::TolerantMode));
+        return;
+    }
+
     // Если не одна из игр не выбрына
-    if (threads->typeGame == -1)return;
+    if (threads->typeGame == -1) return;
 
     // Если у ползователя закончились дни или пользователь вышел из аккаунта
     if(web->userData.authorized == false)
@@ -367,6 +414,8 @@ void AuthForm::on_exitButton_clicked()
 
     ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
     ui->startButton->setText("Запуск");
+
+    web->userData.status = 0;
 
     ui->authWidget->setVisible(true);
     this->currentForm = false;
@@ -774,24 +823,74 @@ void AuthForm::on_settingButton_clicked()
 
 void AuthForm::on_loadButtonSetting_clicked()
 {
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        return;
+    }
+
+    // Если вышла обновление
+    if (web->userData.status == 1)
+    {
+        return;
+    }
+
+
     this->loadSetting = 0;
     web->load("0");
 }
 
 void AuthForm::on_loadButtonSetting2_clicked()
 {
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        return;
+    }
+
+    // Если вышла обновление
+    if (web->userData.status == 1)
+    {
+        return;
+    }
+
     this->loadSetting = 1;
     web->load("1");
 }
 
 void AuthForm::on_saveButtonSetting_clicked()
 {
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        return;
+    }
+
+    // Если вышла обновление
+    if (web->userData.status == 1)
+    {
+        return;
+    }
+
     this->loadSetting = 0;
     web->save("0");
 }
 
 void AuthForm::on_saveButtonSetting2_clicked()
 {
+    // Если на сервере видутся работы
+    if (web->userData.status == 2)
+    {
+        return;
+    }
+
+    // Если вышла обновление
+    if (web->userData.status == 1)
+    {
+        return;
+    }
+
+
     this->loadSetting = 1;
     web->save("1");
 }
