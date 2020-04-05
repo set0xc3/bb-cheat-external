@@ -87,11 +87,22 @@ void AuthForm::loaderFormSlot()
     ui->authWidget->setVisible(false);
     this->currentForm = true;
 
+    // Показываем пользователю количество дней и имя
     ui->nameLabel->setText(web->userData.name);
     ui->remained->setText("Осталось: "+GetCipher::Decrypted(web->userData.day)+" Дней");
 
 
-    qDebug() << "loaderFormSignal()";
+    // Если вышла обновление
+    if (web->userData.status == 1)
+    {
+        if(timer->isActive() == false)timer->stop();
+        threads->isActive = false;
+        ui->startButton->setText("Обновить");
+        ui->startButton->setStyleSheet("QPushButton { background: #4E82B1; color: #fff; }");
+        QDesktopServices::openUrl(QUrl("https://shredhack.ru/", QUrl::TolerantMode));
+    }
+
+
 }
 
 void AuthForm::loadSettingSlot()
@@ -321,47 +332,30 @@ void AuthForm::loadingPartitionSettings()
 
 void AuthForm::on_startButton_clicked()
 {
-    //web->auth("name", "password");
-    //if(web->day != "0")qDebug()<<"Inject";
+    // Если не одна из игр не выбрына
+    if (threads->typeGame == -1)return;
 
-    if (web->version != "" && web->version != web->_version)
+    // Если у ползователя закончились дни или пользователь вышел из аккаунта
+    if(web->userData.authorized == false)
     {
         if(timer->isActive() == false)timer->stop();
         threads->isActive = false;
-        ui->startButton->setText("Обновить");
-        ui->startButton->setStyleSheet("QPushButton { background: #4E82B1; color: #fff; }");
-        QDesktopServices::openUrl(QUrl("https://shredhack.ru/", QUrl::TolerantMode)); return;
     }
 
-    if (threads->typeGame == -1)return;
-
-    if(web->day == "0"){
-        if(timer->isActive() == false)timer->stop();
-        threads->isActive = false;
-        return;
-    }
-
-    if(ui->updatelogText->toMarkdown() == "")ui->updatelogText->setHtml(web->updatelog);
-    if(web->buffupdatelog != web->updatelog){
-        ui->updatelogText->setHtml(web->updatelog);
-        web->buffupdatelog = web->updatelog;
-    }
-
+    // Тут меняется состояние кнопки на TRUE | FALSE
     threads->isActive = !threads->isActive;
-
     if (threads->isActive == true){
 
-        //TRUE
+        //Если TRUE
         ui->startButton->setStyleSheet("QPushButton { background: #E20048; color: #fff; }");
         ui->startButton->setText("Стоп");
     }
     else {
 
-        //FALSE
+        //Если FALSE
         ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
         ui->startButton->setText("Запуск");
     }
-
 
 }
 
@@ -371,8 +365,8 @@ void AuthForm::on_exitButton_clicked()
     threads->isActive = false;
     web->userData.authorized = false;
 
-    ui->startButton->setStyleSheet("QPushButton { background: #E20048; color: #fff; }");
-    ui->startButton->setText("Стоп");
+    ui->startButton->setStyleSheet("QPushButton { background: #22252A; color: #8a8d93; }");
+    ui->startButton->setText("Запуск");
 
     ui->authWidget->setVisible(true);
     this->currentForm = false;
@@ -793,7 +787,7 @@ void AuthForm::on_loadButtonSetting2_clicked()
 void AuthForm::on_saveButtonSetting_clicked()
 {
     this->loadSetting = 0;
-    web->save(0);
+    web->save("0");
 }
 
 void AuthForm::on_saveButtonSetting2_clicked()

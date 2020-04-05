@@ -98,7 +98,7 @@ void website::readyRead()
         QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
         QJsonObject root = document.object();
 
-        if (root["type"] == 0)
+        if (root["server"] == 1 && root["type"] == 0)
         {
             //-- version
             {
@@ -153,20 +153,10 @@ void website::readyRead()
             }
         }
 
-        if (root["type"] == 1)
+        if (root["server"] == 1 && root["type"] == 1)
         {
             loadSetting(root);
         }
-
-//         print out the list of keys ("count")
-//               QStringList keys = root.keys();
-//               foreach(QString key, keys)
-//               {
-//                   qDebug() << key;
-//               }
-
-//         parsecffo
-//         2997teach
 
 
         root = deleted.object();
@@ -259,41 +249,37 @@ void website::load(QString typegame)
 
 void website::save(QString typegame)
 {
-//    QString slogin = Encryption(login);
-////    qDebug() << slogin;
+    QByteArray data;
+    data.append("savesetting=1");
+    data.append("&login="+this->userData.name);
+    data.append("&typegame="+typegame);
 
-//    QByteArray data;
-//    data.append("setting=2");
-//    data.append("&login="+slogin);
-//    data.append("&device=pc");
+    data.append("&aim_bone="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.bone));
+    data.append("&aim_color="+this->threads->section[this->authForm->loadSetting].aimSetting.colorRadius.name());
+    data.append("&aim_isactive="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isActive));
+    data.append("&aim_isradius="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isRadius));
+    data.append("&aim_radius="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.radius));
+    data.append("&aim_smooth="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.smoothness));
 
-//    data.append("&type_game="+Encryption(QString::number(this->authForm->loadSetting)));
-//    data.append("&aim_bone="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.bone)));
-//    data.append("&aim_color="+Encryption(this->threads->section[this->authForm->loadSetting].aimSetting.colorRadius.name()));
-//    data.append("&aim_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isActive)));
-//    data.append("&aim_isradius="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isRadius)));
-//    data.append("&aim_radius="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.radius)));
-//    data.append("&aim_smooth="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.smoothness)));
+    data.append("&esp_isactive="+QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isActive));
+    data.append("&esp_color="+this->threads->section[this->authForm->loadSetting].espSetting.colorRD.name());
+    data.append("&esp_is2dbox="+QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isBox));
+    data.append("&esp_is3dbox="+QString::number(this->threads->section[this->authForm->loadSetting].espSetting.is3DBox));
+    data.append("&esp_ishealth="+QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isHealth));
+    data.append("&esp_isline="+QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isOutline));
+    data.append("&esp_isname="+QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isName));
+    data.append("&esp_isprotection="+QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isArmor));
 
-//    data.append("&esp_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isActive)));
-//    data.append("&esp_color="+Encryption(this->threads->section[this->authForm->loadSetting].espSetting.colorRD.name()));
-//    data.append("&esp_is2dbox="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isBox)));
-//    data.append("&esp_is3dbox="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.is3DBox)));
-//    data.append("&esp_ishealth="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isHealth)));
-//    data.append("&esp_isline="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isOutline)));
-//    data.append("&esp_isname="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isName)));
-//    data.append("&esp_isprotection="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].espSetting.isArmor)));
+    data.append("&misc_isfreeze="+QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isFreezing));
+    data.append("&misc_isunhookcamera="+QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isUnhookCamera));
 
-//    data.append("&misc_isfreeze="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isFreezing)));
-//    data.append("&misc_isunhookcamera="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isUnhookCamera)));
-
-//    data.append("&weapon_isactive="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isActive)));
-//    data.append("&weapon_isautomatic="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isAutomaticWeapon)));
-//    data.append("&weapon_isinfiniteammo="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isInfiniteAmmo)));
-//    data.append("&weapon_isnorecoil="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isNoRecoil)));
-//    data.append("&weapon_rangeshovels="+Encryption(QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.rangeShovels)));
+    data.append("&weapon_isactive="+QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isActive));
+    data.append("&weapon_isautomatic="+QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isAutomaticWeapon));
+    data.append("&weapon_isinfiniteammo="+QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isInfiniteAmmo));
+    data.append("&weapon_isnorecoil="+QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isNoRecoil));
+    data.append("&weapon_rangeshovels="+QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.rangeShovels));
 
 
-    //    this->post("https://shredhack.ru/setting.php/", data);
+    this->post("https://shredhack.ru/api/api.php", data);
 }
 

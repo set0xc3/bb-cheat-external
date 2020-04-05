@@ -45,7 +45,7 @@ public:
         QByteArray day;
         QByteArray name;
         QByteArray version;
-        QByteArray versionBuff = "v10.3";
+        QByteArray versionBuff = "v10.4";
         QByteArray commands;
 
         int status = 0;
