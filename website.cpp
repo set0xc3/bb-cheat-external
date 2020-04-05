@@ -169,7 +169,6 @@ void website::readyRead()
     reply->deleteLater();
 }
 
-
 void website::readyReadHTML()
 {
     static bool buff = true;
@@ -238,7 +237,7 @@ void website::auth(QString login, QString pass)
 
 
     this->post("https://shredhack.ru/api/api.php", data);
-//    this->getHTML("https://shredhack.ru/update-log.php/");
+    this->getHTML("https://shredhack.ru/update-log.php/");
 }
 
 void website::load(QString typegame)

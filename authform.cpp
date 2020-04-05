@@ -125,6 +125,13 @@ void AuthForm::loaderFormSlot()
         ui->updatelogText->setHtml(web->updatelog);
         web->buffupdatelog = web->updatelog;
     }
+
+    if(ui->updatelogText->toMarkdown() == "")ui->updatelogText->setHtml(web->updatelog);
+    if(web->buffupdatelog != web->updatelog)
+    {
+        ui->updatelogText->setHtml(web->updatelog);
+        web->buffupdatelog = web->updatelog;
+    }
 }
 
 void AuthForm::loadSettingSlot()
@@ -167,10 +174,13 @@ void AuthForm::threadUpdate()
         ui->startButton->setStyleSheet("QPushButton { background-color: rgb(255, 132, 8); color: #fff; }");
     }
 
-    if(web->buffupdatelog != web->updatelog){
+    if(ui->updatelogText->toMarkdown() == "")ui->updatelogText->setHtml(web->updatelog);
+    if(web->buffupdatelog != web->updatelog)
+    {
         ui->updatelogText->setHtml(web->updatelog);
         web->buffupdatelog = web->updatelog;
     }
+
 }
 
 void AuthForm::loadingPartitionSettings()
