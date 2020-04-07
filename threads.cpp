@@ -114,16 +114,23 @@ char buffer[256] ;
 
 static bool bHandle = true;
 static bool bbaseAddress = true;
+
+struct PachFunctions
+{
+    bool isNoRecoil = true;
+    bool isAutomaticWeapon = true;
+    bool isFreezing = true;
+    bool isInfiniteAmmo = true;
+    bool isUnhookCamera = true;
+};
+PachFunctions pachFun[2];
+
 void DirectxFunctions::RenderDirectX()
 {
     if (isBlockpost  == false)
     {
-//        CalcFPS();
-
         DirectX.Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00000000, 1.0f, 0);
         DirectX.Device->BeginScene();
-
-
 
 
         if (threads->isActive == true){
@@ -138,7 +145,7 @@ void DirectxFunctions::RenderDirectX()
 
         if (ToolsHack::GetAppstat(nullptr, "BLOCKPOST") == 1 && GetForegroundWindow() == Target.Window)
         {
-            sprintf(textbuffer, "[FPS: %d]", (int)FPS );
+            sprintf(textbuffer, "[FPS: %d]", (int)threads->m_fps );
             Drawing::String(Overlay.Width >> 1, 10, (char*)textbuffer, Color::White);
 
         if (threads->isActive == true && Target.Window != nullptr) //&& GetForegroundWindow() == Target.Window
@@ -148,11 +155,6 @@ void DirectxFunctions::RenderDirectX()
 
             //BLOCKPOST
             {
-                static bool isNoRecoil = true;
-                static bool isAutomaticWeapon = true;
-                static bool isFreezing = true;
-                static bool isInfiniteAmmo = true;
-                static bool isUnhookCamera = true;
 //                threads->section[threads->typeGame].weaponSetting.isRangeShovels = true;
 
 
@@ -194,11 +196,34 @@ void DirectxFunctions::RenderDirectX()
                         _blockpost->baseAddress.MatrixBegin = _blockpost->module.UnityPlayer + 0x1059AC0;
                     }
 
-                    if (threads->section[threads->typeGame].weaponSetting.isNoRecoil == true) isNoRecoil = true;
-                    if (threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true) isAutomaticWeapon = true;
-                    if (threads->section[threads->typeGame].miscSetting.isFreezing == true) isFreezing = true;
-                    if (threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true) isInfiniteAmmo = true;
-                    threads->section[threads->typeGame].weaponSetting.isRangeShovels = true;
+                    if (threads->section[threads->typeGame].weaponSetting.isNoRecoil == true)
+                    {
+                        pachFun[0].isNoRecoil = true;
+                        pachFun[1].isNoRecoil = true;
+                    }
+                    if (threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true)
+                    {
+                        pachFun[0].isAutomaticWeapon = true;
+                        pachFun[1].isAutomaticWeapon = true;
+                    }
+                    if (threads->section[threads->typeGame].miscSetting.isFreezing == true)
+                    {
+                        pachFun[0].isFreezing = true;
+                        pachFun[1].isFreezing = true;
+                    }
+                    if (threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true)
+                    {
+                        pachFun[0].isInfiniteAmmo = true;
+                        pachFun[1].isInfiniteAmmo = true;
+                    }
+                    if (threads->section[threads->typeGame].miscSetting.isUnhookCamera == true)
+                    {
+                        pachFun[0].isUnhookCamera = true;
+                        pachFun[1].isUnhookCamera = true;
+                    }
+
+                    threads->section[0].weaponSetting.isRangeShovels = true;
+                    threads->section[1].weaponSetting.isRangeShovels = true;
 
                     bbaseAddress = false;
                 }
@@ -206,170 +231,246 @@ void DirectxFunctions::RenderDirectX()
                 if (threads->typeGame == 1)
                 {
                     //isNoRecoil
-                    if(threads->section[threads->typeGame].weaponSetting.isNoRecoil == true) {
-                        if(isNoRecoil == true){
-                            mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
-                            isNoRecoil = false;
+                    if(threads->section[threads->typeGame].weaponSetting.isNoRecoil == true)
+                    {
+                        if(pachFun[threads->typeGame].isNoRecoil == true)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            pachFun[threads->typeGame].isNoRecoil = false;
                         }
-                    }else{
-                        if(isNoRecoil == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
-                            isNoRecoil = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isNoRecoil == false)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            pachFun[threads->typeGame].isNoRecoil = true;
                         }
                     }
 
                     //isAutomaticWeapon
-                    if(threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true) {
-                        if(isAutomaticWeapon == true){
-                            mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F, 7, _blockpost->pHandle); //Делает всё оружие авто
-                            isAutomaticWeapon = false;
+                    if(threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true)
+                    {
+                        if(pachFun[threads->typeGame].isAutomaticWeapon == true){
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F != nullptr) mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F, 7, _blockpost->pHandle); //Делает всё оружие авто
+                            pachFun[threads->typeGame].isAutomaticWeapon = false;
                         }
-                    }else{
-                        if(isAutomaticWeapon == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
-                            isAutomaticWeapon = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isAutomaticWeapon == false)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
+                            pachFun[threads->typeGame].isAutomaticWeapon = true;
                         }
                     }
 
                     //isFreezing
-                    if(threads->section[threads->typeGame].miscSetting.isFreezing == true) {
-                        if(isFreezing == true){
-                            mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x719EE0, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
-                            isFreezing = false;
+                    if(threads->section[threads->typeGame].miscSetting.isFreezing == true)
+                    {
+                        if(pachFun[threads->typeGame].isFreezing == true)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x719EE0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x719EE0, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            pachFun[threads->typeGame].isFreezing = false;
                         }
-                    }else{
-                        if(isFreezing == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x719EE0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
-                            isFreezing = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isFreezing == false)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x719EE0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x719EE0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            pachFun[threads->typeGame].isFreezing = true;
                         }
                     }
 
                     //isInfiniteAmmo
-                    if(threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true) {
-                        if(isInfiniteAmmo == true){
-                            mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x72192A, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр639  Local Убирает минус патроны
-                            mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
-                            isInfiniteAmmo = false;
+                    if(threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true)
+                    {
+                        if(pachFun[threads->typeGame].isInfiniteAmmo == true)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x72192A != nullptr) mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x72192A, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр639  Local Убирает минус патроны
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
+                            pachFun[threads->typeGame].isInfiniteAmmo = false;
                         }
-                    }else{
-                        if(isInfiniteAmmo == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x72192A, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
-                            isInfiniteAmmo = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isInfiniteAmmo == false)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x72192A != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x72192A, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
+                            pachFun[threads->typeGame].isInfiniteAmmo = true;
                         }
                     }
 
                     //isUnhookCamera
-                    if(threads->section[threads->typeGame].miscSetting.isUnhookCamera == true) {
-                        if(isUnhookCamera == true){
+                    if(threads->section[threads->typeGame].miscSetting.isUnhookCamera == true)
+                    {
+                        if(pachFun[threads->typeGame].isUnhookCamera == true)
+                        {
+                            //VWIK__CameraAddOffset
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A7790 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x7A7790, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
-                            if (ptrCameraFly == 0 || (LPCVOID)ptrCameraFly == (LPCVOID)0xE8)return;
-                            _blockpost->player.fly = 1;
-                            WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
-                            isUnhookCamera = false;
+                            if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
+                            {
+                                _blockpost->player.fly = 1;
+                                WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
+                                pachFun[threads->typeGame].isUnhookCamera = false;
+                            }
+
                         }
-                    }else{
-                        if(isUnhookCamera == false){
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isUnhookCamera == false)
+                        {
+                            //VWIK__CameraAddOffset
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A7790 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x7A7790, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
-                            if (ptrCameraFly == 0 || (LPCVOID)ptrCameraFly == (LPCVOID)0xE8)return;
-                            _blockpost->player.fly = 0;
-                            WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
-                            isUnhookCamera = true;
+                            if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
+                            {
+                                _blockpost->player.fly = 0;
+                                WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
+                                pachFun[threads->typeGame].isUnhookCamera = true;
+                            }
                         }
                     }
 
                     //isRangeShovels
-//                    if(threads->section[threads->typeGame].weaponSetting.isRangeShovels == true) {
-//                            if(((BYTE*)_blockpost->module.GameAssembly + 0x72095B) == nullptr)return;
-//                            if(_blockpost->pHandle == 0)return;
-//                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x72095B, threads->section[threads->typeGame].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
-//                            threads->section[threads->typeGame].weaponSetting.isRangeShovels = false;
-//                    }
+                    if(threads->section[threads->typeGame].weaponSetting.isRangeShovels == true)
+                    {
+                        if((BYTE*)_blockpost->module.GameAssembly + 0x72095B != nullptr)
+                        {
+                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x72095B, threads->section[threads->typeGame].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
+                            threads->section[threads->typeGame].weaponSetting.isRangeShovels = false;
+                        }
+                    }
+
 
                 }
                 else if (threads->typeGame == 0)
                 {
                     //isNoRecoil
-                    if(threads->section[threads->typeGame].weaponSetting.isNoRecoil == true) {
-                        if(isNoRecoil == true){
-                            mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x68ADB0, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
-                            isNoRecoil = false;
+                    if(threads->section[threads->typeGame].weaponSetting.isNoRecoil == true)
+                    {
+                        if(pachFun[threads->typeGame].isNoRecoil == true)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x68ADB0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x68ADB0, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            pachFun[threads->typeGame].isNoRecoil = false;
                         }
-                    }else{
-                        if(isNoRecoil == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x68ADB0, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
-                            isNoRecoil = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isNoRecoil == false)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x68ADB0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x68ADB0, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            pachFun[threads->typeGame].isNoRecoil = true;
                         }
                     }
 
                     //isAutomaticWeapon
-                    if(threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true) {
-                        if(isAutomaticWeapon == true){
-                            mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x259B3F, 7, _blockpost->pHandle); //Controll__UpdateAttack Делает всё оружие авто
-                            isAutomaticWeapon = false;
+                    if(threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true)
+                    {
+                        if(pachFun[threads->typeGame].isAutomaticWeapon == true)
+                        {
+                             if ((BYTE*)_blockpost->module.GameAssembly + 0x259B3F != nullptr) mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x259B3F, 7, _blockpost->pHandle); //Controll__UpdateAttack Делает всё оружие авто
+                            pachFun[threads->typeGame].isAutomaticWeapon = false;
                         }
-                    }else{
-                        if(isAutomaticWeapon == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x259B3F, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
-                            isAutomaticWeapon = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isAutomaticWeapon == false)
+                        {
+                             if ((BYTE*)_blockpost->module.GameAssembly + 0x259B3F != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x259B3F, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
+                            pachFun[threads->typeGame].isAutomaticWeapon = true;
                         }
                     }
 
                     //isFreezing
-                    if(threads->section[threads->typeGame].miscSetting.isFreezing == true) {
-                        if(isFreezing == true){
-                            mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x257FA0, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
-                            isFreezing = false;
+                    if(threads->section[threads->typeGame].miscSetting.isFreezing == true)
+                    {
+                        if(pachFun[threads->typeGame].isFreezing == true)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x257FA0 != nullptr)mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x257FA0, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            pachFun[threads->typeGame].isFreezing = false;
                         }
-                    }else{
-                        if(isFreezing == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x257FA0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
-                            isFreezing = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isFreezing == false)
+                        {
+                             if ((BYTE*)_blockpost->module.GameAssembly + 0x257FA0 != nullptr)mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x257FA0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            pachFun[threads->typeGame].isFreezing = true;
                         }
                     }
 
                     //isInfiniteAmmo
-                    if(threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true) {
-                        if(isInfiniteAmmo == true){
-                            mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x25F9E9, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр622 Local Убирает минус патроны
-                            mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x155DB0, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
-                            isInfiniteAmmo = false;
+                    if(threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true)
+                    {
+                        if(pachFun[threads->typeGame].isInfiniteAmmo == true)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x25F9E9 != nullptr)mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x25F9E9, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр622 Local Убирает минус патроны
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x155DB0 != nullptr)mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x155DB0, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
+                            pachFun[threads->typeGame].isInfiniteAmmo = false;
                         }
-                    }else{
-                        if(isInfiniteAmmo == false){
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x25F9E9, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x155DB0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
-                            isInfiniteAmmo = true;
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isInfiniteAmmo == false)
+                        {
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x25F9E9 != nullptr)mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x25F9E9, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x155DB0 != nullptr)mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x155DB0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
+                            pachFun[threads->typeGame].isInfiniteAmmo = true;
                         }
                     }
 
                     //isUnhookCamera
-                    if(threads->section[threads->typeGame].miscSetting.isUnhookCamera == true) {
-                        if(isUnhookCamera == true){
+                    if(threads->section[threads->typeGame].miscSetting.isUnhookCamera == true)
+                    {
+                        if(pachFun[threads->typeGame].isUnhookCamera == true)
+                        {
+                            //VWIK__CameraAddOffset
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x68AE80 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x68AE80, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
-                            if (ptrCameraFly == 0 || (LPCVOID)ptrCameraFly == (LPCVOID)0xE8)return;
-                            _blockpost->player.fly = 1;
-                            WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
-                            isUnhookCamera = false;
+                            if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
+                            {
+                                _blockpost->player.fly = 1;
+                                WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
+                                pachFun[threads->typeGame].isUnhookCamera = false;
+                            }
                         }
-                    }else{
-                        if(isUnhookCamera == false){
+                    }
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isUnhookCamera == false)
+                        {
+                            //VWIK__CameraAddOffset
+                            if ((BYTE*)_blockpost->module.GameAssembly + 0x68AE80 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x68AE80, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
-                            if (ptrCameraFly == 0 || (LPCVOID)ptrCameraFly == (LPCVOID)0xE8)return;
-                            _blockpost->player.fly = 0;
-                            WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
-                            isUnhookCamera = true;
+                            if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
+                            {
+                                _blockpost->player.fly = 0;
+                                WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
+                                pachFun[threads->typeGame].isUnhookCamera = true;
+                            }
                         }
                     }
 
                     //isRangeShovels
-//                    if(threads->section[threads->typeGame].weaponSetting.isRangeShovels == true) {
-//                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x25D9EB, threads->section[threads->typeGame].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
-//                            threads->section[threads->typeGame].weaponSetting.isRangeShovels = false;
-//                    }
+                    if(threads->section[threads->typeGame].weaponSetting.isRangeShovels == true)
+                    {
+                        if(((BYTE*)_blockpost->module.GameAssembly + 0x25E4B0) != nullptr)
+                        {
+                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x25E4B0, threads->section[threads->typeGame].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
+                            threads->section[threads->typeGame].weaponSetting.isRangeShovels = false;
+                        }
+                    }
 
                 }
-
 
 
                 DWORD ptrMatrix = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0xBC });
@@ -380,6 +481,12 @@ void DirectxFunctions::RenderDirectX()
                     _blockpost->matrix.viewMatrix16[2] = _blockpost->matrix.viewMatrix44[0][2], _blockpost->matrix.viewMatrix16[6] = _blockpost->matrix.viewMatrix44[1][2], _blockpost->matrix.viewMatrix16[10] = _blockpost->matrix.viewMatrix44[2][2], _blockpost->matrix.viewMatrix16[14] = _blockpost->matrix.viewMatrix44[3][2],
                     _blockpost->matrix.viewMatrix16[3] = _blockpost->matrix.viewMatrix44[0][3], _blockpost->matrix.viewMatrix16[7] = _blockpost->matrix.viewMatrix44[1][3], _blockpost->matrix.viewMatrix16[11] = _blockpost->matrix.viewMatrix44[2][3], _blockpost->matrix.viewMatrix16[15] = _blockpost->matrix.viewMatrix44[3][3];
                 }
+
+                DWORD ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0x134, 0x148 });
+                ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerDeath), &_blockpost->player.death, 4, nullptr);
+                if (ptrPlayerDeath  != 0x148 &&_blockpost->player.death == 5)
+                    pachFun[threads->typeGame].isUnhookCamera = true;
+
 
                 DWORD ptrPlayerTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x134, 0x14 });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerTeam), &_blockpost->player.team, 4, nullptr);
@@ -428,6 +535,9 @@ void DirectxFunctions::RenderDirectX()
 
                         DWORD ptrEntityVectorHead = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x104, 0x8, 0x34, 0x60 });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrEntityVectorHead), &_blockpost->entity[i].vectorHead, 12, nullptr);
+
+
+                        _blockpost->rageShovel.distance = MathsFunctions::Distance(_blockpost->player.vector, _blockpost->entity[i].vector);
 
 
                         _blockpost->entity[i].vector.y -= 2;
@@ -560,10 +670,28 @@ void DirectxFunctions::RenderDirectX()
 
 //        if (_blockpost->aimBot.fov[_blockpost->aimBot.boneId] < threads->section[threads->typeGame].aimSetting.radius || _blockpost->aimBot.fov[_blockpost->aimBot.boneId] < -threads->section[threads->typeGame].aimSetting.radius) Drawing::Line(Overlay.Width / 2, Overlay.Height / 2, _blockpost->entity[_blockpost->aimBot.target].screenHead.x, _blockpost->entity[_blockpost->aimBot.target].screenHead.y, Color::White);
 
+//        Drawing::Line(Overlay.Width / 2,  Overlay.Height / Overlay.Width, 0, 0, Color::Yellow);
 
         if (threads->section[threads->typeGame].aimSetting.isRadius == true)Drawing::Circle(Overlay.Width / 2, Overlay.Height / 2, (threads->section[threads->typeGame].aimSetting.radius * 11), Drawing::QColorToD3DCOLOR(threads->section[threads->typeGame].aimSetting.colorRadius));
 
         }
+        }
+
+        static int fps = 0;
+        static float last_tick_count = 0.f;
+
+        //Increase FPS
+        fps++;
+
+        //Get current time
+        float cur_tick_count = clock( ) * 0.001f;
+
+        //Check if the FPS haven't been updated for 1s or longer
+        if ( cur_tick_count - last_tick_count >= 1.f ) {
+            //Update our FPS
+            last_tick_count = cur_tick_count;
+            threads->m_fps = fps;
+            fps = 0;
         }
 
         DirectX.Device->EndScene();
@@ -678,8 +806,6 @@ void DirectxFunctions::ThreadProc()
                 threads->settingSetting.VerticalSync = 0;
             }
         }    
-                oldTime = GetTickCount64();
-
 
                 if (PeekMessage(&Overlay.Message, nullptr, 0, 0, PM_REMOVE)) //Overlay.Window
                 {
@@ -691,22 +817,6 @@ void DirectxFunctions::ThreadProc()
                                     break;
                 }
 
-
-
-        //        qDebug() << Target.Size.top;
-
-                // счетчик фпс
-                FrameCnt++;
-                newTime = GetTickCount64();
-                deltatime = newTime - oldTime;
-                TimeElapsed += deltatime;
-
-                if (TimeElapsed >= 1000)
-                {
-                    FPS = 1000 * (float)FrameCnt / TimeElapsed;
-                    TimeElapsed = 0.0f;
-                    FrameCnt = 0;
-                }
 
                 Threads::msleep(1);
     }

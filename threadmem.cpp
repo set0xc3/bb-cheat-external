@@ -299,7 +299,7 @@ void ThreadMem::Update()
                 {
                     if (blockpost->aimBot.fov[blockpost->aimBot.boneId] < threads->section[threads->typeGame].aimSetting.radius || blockpost->aimBot.fov[blockpost->aimBot.boneId] < -threads->section[threads->typeGame].aimSetting.radius)
                     {
-                        if (blockpost->server.gamemode != 2 && blockpost->server.gamemode != 5)
+                        if (blockpost->server.gamemode != 2 && blockpost->server.gamemode != 5 && blockpost->server.gamemode != 8)
                         {
                             if(blockpost->player.team == blockpost->entity[blockpost->aimBot.target].team)
                             {

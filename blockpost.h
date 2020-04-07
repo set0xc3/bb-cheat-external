@@ -108,6 +108,18 @@ public:
     Entity entity[40];
 
 
+    struct RageShovel
+    {
+        int boneId;
+        int target = -1;
+        bool isActive = true;
+        float distance;
+        float minDiffAng;
+        D3DXVECTOR3 screen;
+    };
+    RageShovel rageShovel;
+
+
     struct AimBot
     {
         int boneId;

@@ -965,3 +965,8 @@ void AuthForm::on_homeButton_clicked()
 {
     QDesktopServices::openUrl(QUrl("https://www.youtube.com/channel/UCYYNuR_fy8p8oOAReTEwu-A/featured", QUrl::TolerantMode)); return;
 }
+
+void AuthForm::on_rangeShovelsSlider_actionTriggered(int action)
+{
+
+}

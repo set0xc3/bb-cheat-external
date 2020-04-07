@@ -161,9 +161,11 @@ void Drawing::Line(int x, int y, int x2, int y2, D3DCOLOR color)
     D3DXVECTOR2 Line[2];
     Line[0] = D3DXVECTOR2(x, y);
     Line[1] = D3DXVECTOR2(x2, y2);
+    DirectX.Line->Begin();
     DirectX.Line->SetAntialias(false);
     DirectX.Line->SetWidth(1);
     DirectX.Line->Draw(Line, 2, color);
+    DirectX.Line->End();
 }
 
 void Drawing::FilledRect(int x, int y, int width, int height, D3DCOLOR color)

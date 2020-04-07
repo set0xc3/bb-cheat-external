@@ -2353,7 +2353,7 @@ QPushButton:hover {
      </widget>
      <widget class="QSlider" name="rangeShovelsSlider">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -2541,12 +2541,12 @@ QPushButton:hover {
        <rect>
         <x>45</x>
         <y>50</y>
-        <width>101</width>
+        <width>201</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Убрать заморозку</string>
+       <string>Убрать заморозку при спавне</string>
       </property>
      </widget>
     </widget>
@@ -2928,12 +2928,12 @@ QPushButton:hover {
     <zorder>weaponButton</zorder>
     <zorder>miscButton</zorder>
     <zorder>aimButton</zorder>
-    <zorder>Misc_Widget</zorder>
     <zorder>ESP_Widget</zorder>
     <zorder>startButton</zorder>
     <zorder>Aim_Widget</zorder>
-    <zorder>Weapon_Widget</zorder>
     <zorder>Setting_Widget</zorder>
+    <zorder>Misc_Widget</zorder>
+    <zorder>Weapon_Widget</zorder>
    </widget>
    <zorder>mainWidget</zorder>
    <zorder>authWidget</zorder>

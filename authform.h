@@ -123,6 +123,8 @@ private slots:
 
     void on_homeButton_clicked();
 
+    void on_rangeShovelsSlider_actionTriggered(int action);
+
 private:
     Ui::AuthForm *ui;
 

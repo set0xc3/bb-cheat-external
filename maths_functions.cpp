@@ -1,6 +1,14 @@
 #include "maths_functions.h"
 #define M_PI 3.141f
 
+#define PITCH 0 //x
+#define YAW 1  //y
+#define ROLL 2 //z
+const float PITCH_MAX_DOWN    =    90;
+const float PITCH_MAX_UP    =  -90;
+const float YAW_MAX_LEFT    =    180;
+const float YAW_MAX_RIGHT    =  -180;
+
 D3DXVECTOR3 MathsFunctions::Subtract(D3DXVECTOR3 src, D3DXVECTOR3 dst)
 {
     D3DXVECTOR3 diff;

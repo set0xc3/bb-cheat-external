@@ -53,6 +53,7 @@ public:
     bool isActive = false;
     bool switchGame = false;
     int typeGame = -1;
+    int m_fps;
 
     struct SettingSetting
     {
