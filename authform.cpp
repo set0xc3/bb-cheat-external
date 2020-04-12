@@ -6,6 +6,7 @@
 #include "threadmem.h"
 #include "ui_authform.h"
 #include "website.h"
+#include "conio.h"
 
 #include <QtAwesome.h>
 #include <QSslSocket>
@@ -52,7 +53,9 @@ AuthForm::AuthForm(QWidget *parent) :
     connect(web, SIGNAL(loadSettingSignal()), this, SLOT(loadSettingSlot()));
 
     timer = new QTimer();
+    waitingForm = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(threadUpdate()));
+    connect(waitingForm, SIGNAL(timeout()), this, SLOT(KeyBind()));
 
 
     threads->start(QThread::TimeCriticalPriority);
@@ -64,11 +67,31 @@ AuthForm::AuthForm(QWidget *parent) :
     ui->Weapon_Widget->setVisible(false);
     ui->Misc_Widget->setVisible(false);
     ui->Setting_Widget->setVisible(false);
+    ui->Waiting_Widget->setVisible(false);
 }
 
 AuthForm::~AuthForm()
 {
     delete ui;
+}
+
+
+void AuthForm::KeyBind()
+{
+    if (this->waitingCheck == true)
+    {
+        Qt::Key key = Qt::Key_Up;
+        qDebug() << QKeySequence(key).toString(); // prints "Up"
+
+        if (GetAsyncKeyState(VK_LBUTTON) && 1)
+        {
+
+
+            this->waitingCheck = false;
+            ui->Waiting_Widget->setVisible(false);
+            waitingForm->stop();
+        }
+    }
 }
 
 // Авторизация
@@ -969,4 +992,14 @@ void AuthForm::on_homeButton_clicked()
 void AuthForm::on_rangeShovelsSlider_actionTriggered(int action)
 {
 
+}
+
+void AuthForm::on_aimBotKeyButton_clicked()
+{
+    if (this->waitingCheck == false)
+    {
+        ui->Waiting_Widget->setVisible(true);
+        this->waitingCheck = true;
+        waitingForm->start(1);
+    }
 }

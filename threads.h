@@ -70,6 +70,7 @@ public:
             bool isRadius = false;
 
             int aim = 0;
+            QString keybind = "";
             int smoothness = 0;
             int radius = 5;
             int bone = 0;

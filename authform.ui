@@ -2067,6 +2067,25 @@ QPushButton:hover {
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <widget class="QPushButton" name="aimBotKeyButton">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>-100</x>
+        <y>20</y>
+        <width>61</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(68, 71, 76);</string>
+      </property>
+      <property name="text">
+       <string>Key Bind</string>
+      </property>
+     </widget>
      <zorder>label_16</zorder>
      <zorder>label_19</zorder>
      <zorder>smoothnessSlider</zorder>
@@ -2083,6 +2102,7 @@ QPushButton:hover {
      <zorder>boneBox</zorder>
      <zorder>smoothnessLabel</zorder>
      <zorder>radiusLabel</zorder>
+     <zorder>aimBotKeyButton</zorder>
     </widget>
     <widget class="QWidget" name="Weapon_Widget" native="true">
      <property name="enabled">
@@ -2908,6 +2928,106 @@ QPushButton:hover {
      <zorder>loadButtonSetting2</zorder>
      <zorder>clearButtonSetting2</zorder>
     </widget>
+    <widget class="QWidget" name="Waiting_Widget" native="true">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>701</width>
+       <height>501</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(0, 0, 0, 150);</string>
+     </property>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>160</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Franklin Gothic 7</family>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: auto;
+color: rgb(201, 214, 237)</string>
+      </property>
+      <property name="text">
+       <string>Ожидание...</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>190</y>
+        <width>431</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Franklin Gothic 7</family>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: auto;
+color: rgb(201, 214, 237)</string>
+      </property>
+      <property name="text">
+       <string>Нажмите любую клавишу для привязки</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_31">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>220</y>
+        <width>491</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Franklin Gothic 7</family>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: auto;
+color: rgb(201, 214, 237)</string>
+      </property>
+      <property name="text">
+       <string>Нажмите клавишу ESC, чтобы снять привязку</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
     <zorder>widget</zorder>
     <zorder>widget_2</zorder>
     <zorder>remained</zorder>
@@ -2928,12 +3048,13 @@ QPushButton:hover {
     <zorder>weaponButton</zorder>
     <zorder>miscButton</zorder>
     <zorder>aimButton</zorder>
-    <zorder>ESP_Widget</zorder>
     <zorder>startButton</zorder>
-    <zorder>Aim_Widget</zorder>
-    <zorder>Setting_Widget</zorder>
     <zorder>Misc_Widget</zorder>
+    <zorder>ESP_Widget</zorder>
+    <zorder>Setting_Widget</zorder>
     <zorder>Weapon_Widget</zorder>
+    <zorder>Waiting_Widget</zorder>
+    <zorder>Aim_Widget</zorder>
    </widget>
    <zorder>mainWidget</zorder>
    <zorder>authWidget</zorder>

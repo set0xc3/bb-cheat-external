@@ -19,6 +19,7 @@ class AuthForm : public QMainWindow
 
 private:
     bool currentForm = false;
+    bool waitingCheck = false;
 
 public:
    int loadSetting = -1;
@@ -36,6 +37,7 @@ private slots:
     void loadSettingSlot();
     void authFormSlot();
     void threadUpdate();
+    void KeyBind();
 
     void loadingPartitionSettings();
 
@@ -125,9 +127,12 @@ private slots:
 
     void on_rangeShovelsSlider_actionTriggered(int action);
 
+    void on_aimBotKeyButton_clicked();
+
 private:
     Ui::AuthForm *ui;
 
     QTimer *timer;
+    QTimer *waitingForm;
 };
 #endif // AUTHFORM_H

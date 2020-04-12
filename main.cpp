@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 //    qDebug() << decodedString;
 //    qDebug() << encodeText.toBase64();
 
-//    qDebug() << GetCipher::Encryption("");
+//    qDebug() << GetCipher::Encryption("v10.9");
 
 
     AuthForm auth;
