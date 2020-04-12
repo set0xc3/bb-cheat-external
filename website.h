@@ -48,11 +48,13 @@ public:
         QString name;
         QByteArray password;
         QByteArray version;
-        QByteArray versionBuff = "Z6GFZX4J7zlHmJcit7O75hRi0W3bqDs/+lYhgYEjg16IKns3X6a6quscXSLjCxhNLfZkm0Fblgb13AoCgIWOzMyKPn2Mhs0Dx8kYDrT6pBkHOLTJEu4SUWRw7VTxZTWYIoDJ1OPpzPfWSXd2ldeSk2IPnPS+2W9CdxWopTVQoWKnORkgswDJqhUu7QfpPR2c68mtmHAnBclrFL+8fArGINFl21tARXozyT9P84ZW7LS+/rwjPL5zivhJmTN53txTQApLMq281gipCznzwd6XUYHl7cozHoQIDvUHedjI7CsWIP8no9DtGSLUCnBM/gHilRxJ/dYZbgIFwOxy+DuQmA==";
+        QByteArray versionBuff = "tS41GzZVkXRQocYC1XmFGh3uXSmjw1gD6oGqjbt0UGF+oE5EST+kA983h6cWIUlnUgQ3wU3v5E+c5XeftVOgVWcWaebZftGjNkVw0rgsezSff5rxDP+H2Xs3higgX1lOFV/y/S3OvULLjuM1EZHc+70qkRRMLGt5QEBgGWZsw6yc5hCKyjcBCP3Cv3iNY7CqYBbsMzPiV8FjHvP6djQRg3syttegWRrmQpwKxvHHabfD1nu1dJPzh/wulfMUf59XtrtS7AT14LjU9wlgfr3ZFfBWBrL2Ty0eFY+pw7+NjyHBrxs4R19xhKRkJq16a4JjwRdY1zC1QGGgV06QF+0SyA==";
 
         QByteArray servercommBuff = "a/The3CW+rTkyNrMzDTtz+I/NTryxd2r/bweQTxjQaf5H9OKi0hl3Uvm/yMeDAx7STFzfqWKO0wLTAzzJriKhUcTFGZMIND6VxF5Y0BrVbk4mXdihBez7F0z/7ET0VsamHCChriuqz2Wul06Tr3pQuA4bz77MQ3vW4+9/qhcRXJKXLRX5mIxWfv2xLmuyGiiW1E/Bj+McmspcmQvaGHc9hJX++ozeugbKPP2K6ZvA0mg4KjjEOslk2GE/wXTu47fryCpHtFr6fIzMyfJhuJY5fP7hTir5RmJPNJfv52mdRudb98Xssw/LsAw0kl/eTghU5ortpgk2AL7K117Av5PLw==";
-
         QByteArray servercomm;
+
+        QByteArray banned = "";
+        QByteArray frozen = "";
 
         int status = 0;
         int typeGame = -1;

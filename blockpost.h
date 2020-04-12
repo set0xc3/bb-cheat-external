@@ -62,11 +62,14 @@ public:
         int health;
         int team;
         int teamZombie;
+        int burst; // Атака
         bool fly;
         DWORD death;
         D3DXVECTOR3 angle;
         D3DXVECTOR3 vector;
         D3DXVECTOR3 vectorHead;
+        D3DXVECTOR3 screen;
+        D3DXVECTOR3 screenHead;
     };
     Player player;
 

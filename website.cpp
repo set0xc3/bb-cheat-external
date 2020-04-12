@@ -102,6 +102,9 @@ void website::readyRead()
 
         if (root["server"] == 1 && root["type"] == 0)
         {
+            // userData.status
+            // 1-обнова, 2-техю работы, 3-дни замароженны, 4-бан.
+
             //-- version
             {
                 QJsonValue authorized = root["version"];
@@ -109,6 +112,12 @@ void website::readyRead()
                 QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
                 this->userData.version = b_data;
+
+                if (GetCipher::Decrypted(b_data) == "-1" || GetCipher::Decrypted(b_data) == "")
+                {
+                    this->userData.authorized = false;
+                    exit(0);
+                }
 
                 // Если вышла обнова, то говорим пользователю обновитья
                 if (GetCipher::Decrypted(b_data) != GetCipher::Decrypted(this->userData.versionBuff)) this->userData.status = 1;
@@ -120,6 +129,12 @@ void website::readyRead()
                 QJsonValue authorized = root["day"];
                 QString s_data = authorized.toString();
                 QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+
+                if (GetCipher::Decrypted(b_data) == "-1" || GetCipher::Decrypted(b_data) == "")
+                {
+                    this->userData.authorized = false;
+                    exit(0);
+                }
 
                 this->userData.day = b_data;
 
@@ -143,10 +158,34 @@ void website::readyRead()
                 QString s_data = authorized.toString();
                 QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
 
+                if (GetCipher::Decrypted(b_data) == "-1" || GetCipher::Decrypted(b_data) == "")
+                {
+                    this->userData.authorized = false;
+                    exit(0);
+                }
+
                 this->userData.servercomm = b_data;
 
                 // Если видутся работы на сервере
                 if (GetCipher::Decrypted(b_data) == GetCipher::Decrypted(this->userData.servercommBuff)) this->userData.status = 2;
+            }
+
+            //-- frozen
+            {
+                QJsonValue authorized = root["frozen"];
+                QString s_data = authorized.toString();
+                QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+
+                if (GetCipher::Decrypted(b_data) == "-1" || GetCipher::Decrypted(b_data) == "")
+                {
+                    this->userData.authorized = false;
+                    exit(0);
+                }
+
+                this->userData.servercomm = b_data;
+
+                // Если у дни ползователья замароженны
+                if (GetCipher::Decrypted(b_data) == "1") this->userData.authorized = false;
             }
 
             emit loaderFormSignal();

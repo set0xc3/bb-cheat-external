@@ -92,6 +92,8 @@ int main(int argc, char *argv[])
 //    qDebug() << decodedString;
 //    qDebug() << encodeText.toBase64();
 
+//    qDebug() << GetCipher::Encryption("");
+
 
     AuthForm auth;
     auth.setWindowTitle(QString::fromStdString(random_string()));

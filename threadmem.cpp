@@ -79,6 +79,13 @@ void ThreadMem::Update()
                 }
             }
 
+            DWORD ptrPlayerVectorHead = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0x3B4 });
+            ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerVectorHead), &blockpost->player.vectorHead, 12, nullptr);
+
+            //AimBot
+            DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x6C });
+            ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerAngle), &blockpost->player.angle, 8, nullptr);
+
 
             DWORD entityDist = 0x10;
             for (int i = 0; i < 40; i++)
@@ -118,10 +125,6 @@ void ThreadMem::Update()
                     entityDist += 0x4;
                     continue;
                 }
-
-                DWORD ptrPlayerVectorHead = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0x3B4 });
-                ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerVectorHead), &blockpost->player.vectorHead, 12, nullptr);
-
 
                 DWORD ptrEntityVectorHeadT = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x104, 0x8, 0x34, 0x60 });
                 ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrEntityVectorHeadT), &blockpost->entity[i].vectorHeadT, 12, nullptr);
@@ -167,13 +170,6 @@ void ThreadMem::Update()
 
                 DWORD ptrEntityVectorRLeg3 = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x114, 0x18, 0x8, 0x34, 0x60 });
                 ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrEntityVectorRLeg3), &blockpost->entity[i].vectorRLeg[2], 12, nullptr);
-
-
-                //AimBot
-                DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x6C });
-                ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerAngle), &blockpost->player.angle, 8, nullptr);
-                if ((LPCVOID)(ptrPlayerAngle == 0x6C))return;
-
 
                 //Bone
                 {
@@ -281,7 +277,26 @@ void ThreadMem::Update()
                     }
                 }
 
+//                DWORD ptrburst = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0xC0 });
 
+//                blockpost->rageShovel.distance = MathsFunctions::Distance(blockpost->player.vectorHead, blockpost->entity[i].vector);
+//                if (blockpost->rageShovel.distance <= 100)
+//                {
+//                    blockpost->player.angle += MathsFunctions::Clamp(MathsFunctions::Norm(MathsFunctions::AimbotSmooth(blockpost->entity[i].angle[0], blockpost->player.angle)))
+//                            / ((threads->section[threads->typeGame].aimSetting.smoothness / 3) + 1.0f);
+
+////                    Drawing::Line(Overlay.Width / 2, Overlay.Height, blockpost->entity[i].screenHead.x, blockpost->entity[i].screenHead.y, Color::Blue);
+
+//                    WriteProcessMemory(blockpost->pHandle, (LPCVOID*)(ptrPlayerAngle), &blockpost->player.angle, 8, nullptr);
+
+//                    blockpost->player.burst = 1;
+//                    WriteProcessMemory(blockpost->pHandle, (LPCVOID*)(ptrburst), &blockpost->player.burst, 4, nullptr);
+//                }
+//                else
+//                {
+//                    blockpost->player.burst = 0;
+//                    WriteProcessMemory(blockpost->pHandle, (LPCVOID*)(ptrburst), &blockpost->player.burst, 4, nullptr);
+//                }
 
         //            blockpost->entity[i].vector.y -= 2;
         //            vectorHead.y += 0.5f;
@@ -291,8 +306,8 @@ void ThreadMem::Update()
             }
 
             //AimBot
-            DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x6C });
-            ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerAngle), &blockpost->player.angle, 8, nullptr);
+//            DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x6C });
+//            ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerAngle), &blockpost->player.angle, 8, nullptr);
             if (threads->section[threads->typeGame].aimSetting.isActive == true)
             {
                 if (blockpost->aimBot.isActive == false)
