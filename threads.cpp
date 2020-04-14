@@ -5,13 +5,15 @@
 #include "mem.h"
 #include "toolshack.h"
 #include "blockpost.h"
-#include "maths_functions.h";
+#include "maths_functions.h"
+#include "signaturescanner.h"
 #include <Psapi.h>
 #include <QFontDatabase>
 #include <string>
 
 static Blockpost* _blockpost = nullptr;
 static Threads* threads = nullptr;
+static SignatureScanner sigScan = *new SignatureScanner();
 static bool isBlockpost = true;
 static int type = 0;
 
@@ -75,7 +77,6 @@ void CalcFPS()
 //DirectX.Param.SwapEffect = D3DSWAPEFFECT_DISCARD;
 
 
-
 void DirectxFunctions::DirectXInit(HWND hwnd)
 {
     if (FAILED(Direct3DCreate9Ex(D3D_SDK_VERSION, &DirectX.Object)))
@@ -127,6 +128,33 @@ PachFunctions pachFun[2];
 
 void DirectxFunctions::RenderDirectX()
 {
+    // Scan Signature
+    {
+//        char process[] = "BLOCKPOST.exe";
+
+//        DWORD pID = Scanner::GetPID(process);
+//        if (!pID) {
+//            std::cout << "Could not find process" << std::endl;
+//            std::cin.get();
+//        }
+
+//        HANDLE pHandle = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE, false, pID);
+//        if (!pHandle) {
+//            std::cout << "Could not obtain handle" << std::endl;
+//            std::cin.get();
+//        }
+
+
+
+//        if (sigScan.steam.ins.RangeShovels.address) std::cout << "Address: " << std::hex << sigScan.steam.ins.RangeShovels.address << std::endl;
+//        else std::cout << "No address" << std::endl;
+
+//        std::cin.get();
+    }
+
+
+
+
     if (isBlockpost  == false)
     {
         DirectX.Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00000000, 1.0f, 0);
@@ -178,22 +206,151 @@ void DirectxFunctions::RenderDirectX()
                 {
                     if (threads->typeGame == 1) //Если это Steam
                     {
-                        _blockpost->baseAddress.PLH = _blockpost->module.GameAssembly + 0xB1D0FC;
-                        _blockpost->baseAddress.Controll = _blockpost->module.GameAssembly + 0xB1D08C;
-                        _blockpost->baseAddress.MainManager = _blockpost->module.GameAssembly + 0xB1D16C;
-                        _blockpost->baseAddress.VWIK = _blockpost->module.GameAssembly + 0xB1D1D0;
-                        _blockpost->baseAddress.GUIInv = _blockpost->module.GameAssembly + 0xB1D134;
-                       // _blockpost->baseAddress.Players = _blockpost->module.GameAssembly + 0xB117E4;
-                        _blockpost->baseAddress.MatrixBegin = _blockpost->module.UnityPlayer + 0x1059AC0;
+                        static bool read = true;
+                        if (read == true)
+                        {
+                            _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                       (char*)sigScan.steam.module.PLH.module,
+                                                                                                                       (char*)sigScan.steam.module.PLH.pattern,
+                                                                                                                       (char*)sigScan.steam.module.PLH.mask)+0x1);
+
+                            _blockpost->baseAddress.Controll = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                                   (char*)sigScan.steam.module.Controll.module,
+                                                                                                                                   (char*)sigScan.steam.module.Controll.pattern,
+                                                                                                                                   (char*)sigScan.steam.module.Controll.mask)+0x1);
+
+                            _blockpost->baseAddress.MainManager = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                               (char*)sigScan.steam.module.MainManager.module,
+                                                                                                                               (char*)sigScan.steam.module.MainManager.pattern,
+                                                                                                                               (char*)sigScan.steam.module.MainManager.mask)+0x1);
+
+                            _blockpost->baseAddress.VWIK = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                        (char*)sigScan.steam.module.VWIK.module,
+                                                                                                                        (char*)sigScan.steam.module.VWIK.pattern,
+                                                                                                                        (char*)sigScan.steam.module.VWIK.mask)+0x1);
+
+                            _blockpost->baseAddress.GUIInv = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                          (char*)sigScan.steam.module.GUIInv.module,
+                                                                                                                          (char*)sigScan.steam.module.GUIInv.pattern,
+                                                                                                                          (char*)sigScan.steam.module.GUIInv.mask)+0x1);
+
+                            _blockpost->baseAddress.MatrixBegin = _blockpost->module.UnityPlayer + 0x1059AC0;
+
+
+                            {
+                                sigScan.steam.fun.SetFreeze.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.steam.fun.SetFreeze.module,
+                                                                         (char*)sigScan.steam.fun.SetFreeze.pattern,
+                                                                         (char*)sigScan.steam.fun.SetFreeze.mask);
+
+                                sigScan.steam.fun.SendAttack.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.steam.fun.SendAttack.module,
+                                                                         (char*)sigScan.steam.fun.SendAttack.pattern,
+                                                                         (char*)sigScan.steam.fun.SendAttack.mask);
+
+                                sigScan.steam.fun.CameraAddAngle.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.steam.fun.CameraAddAngle.module,
+                                                                         (char*)sigScan.steam.fun.CameraAddAngle.pattern,
+                                                                         (char*)sigScan.steam.fun.CameraAddAngle.mask);
+
+                                sigScan.steam.fun.CameraAddOffset.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.steam.fun.CameraAddOffset.module,
+                                                                         (char*)sigScan.steam.fun.CameraAddOffset.pattern,
+                                                                         (char*)sigScan.steam.fun.CameraAddOffset.mask);
+                                //-------------------
+
+                                sigScan.steam.ins.InfiniteAmmo.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.steam.ins.InfiniteAmmo.module,
+                                                                         (char*)sigScan.steam.ins.InfiniteAmmo.pattern,
+                                                                         (char*)sigScan.steam.ins.InfiniteAmmo.mask);
+
+                                sigScan.steam.ins.RangeShovels.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.steam.ins.RangeShovels.module,
+                                                                         (char*)sigScan.steam.ins.RangeShovels.pattern,
+                                                                         (char*)sigScan.steam.ins.RangeShovels.mask);
+
+                                sigScan.steam.ins.AutomaticWeapon.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.steam.ins.AutomaticWeapon.module,
+                                                                         (char*)sigScan.steam.ins.AutomaticWeapon.pattern,
+                                                                         (char*)sigScan.steam.ins.AutomaticWeapon.mask);
+                             read = false;
+                            }
+                        }
+
                     }
                     else  //Если это VK
                     {
-                        _blockpost->baseAddress.PLH = _blockpost->module.GameAssembly + 0xB262E8;
-                        _blockpost->baseAddress.Controll = _blockpost->module.GameAssembly + 0xB2627C;
-                        _blockpost->baseAddress.MainManager = _blockpost->module.GameAssembly + 0xB26324;
-                        _blockpost->baseAddress.VWIK = _blockpost->module.GameAssembly + 0xB263C4;
-                        //_blockpost->baseAddress.Players = _blockpost->module.GameAssembly + 0x0;
-                        _blockpost->baseAddress.MatrixBegin = _blockpost->module.UnityPlayer + 0x1059AC0;
+                        static bool read = true;
+                        if (read == true)
+                        {
+                            _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                       (char*)sigScan.launcher.module.PLH.module,
+                                                                                                                       (char*)sigScan.launcher.module.PLH.pattern,
+                                                                                                                       (char*)sigScan.launcher.module.PLH.mask)+0x1);
+
+                            _blockpost->baseAddress.Controll = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                                   (char*)sigScan.launcher.module.Controll.module,
+                                                                                                                                   (char*)sigScan.launcher.module.Controll.pattern,
+                                                                                                                                   (char*)sigScan.launcher.module.Controll.mask)+0x1);
+
+                            _blockpost->baseAddress.MainManager = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                               (char*)sigScan.launcher.module.MainManager.module,
+                                                                                                                               (char*)sigScan.launcher.module.MainManager.pattern,
+                                                                                                                               (char*)sigScan.launcher.module.MainManager.mask)+0x1);
+
+                            _blockpost->baseAddress.VWIK = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                        (char*)sigScan.launcher.module.VWIK.module,
+                                                                                                                        (char*)sigScan.launcher.module.VWIK.pattern,
+                                                                                                                        (char*)sigScan.launcher.module.VWIK.mask)+0x1);
+
+                            _blockpost->baseAddress.GUIInv = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                                                                          (char*)sigScan.launcher.module.GUIInv.module,
+                                                                                                                          (char*)sigScan.launcher.module.GUIInv.pattern,
+                                                                                                                          (char*)sigScan.launcher.module.GUIInv.mask)+0x1);
+
+                            _blockpost->baseAddress.MatrixBegin = _blockpost->module.UnityPlayer + 0x1059AC0;
+
+
+                            {
+                                sigScan.launcher.fun.SetFreeze.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.launcher.fun.SetFreeze.module,
+                                                                         (char*)sigScan.launcher.fun.SetFreeze.pattern,
+                                                                         (char*)sigScan.launcher.fun.SetFreeze.mask);
+
+                                sigScan.launcher.fun.SendAttack.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.launcher.fun.SendAttack.module,
+                                                                         (char*)sigScan.launcher.fun.SendAttack.pattern,
+                                                                         (char*)sigScan.launcher.fun.SendAttack.mask);
+
+                                sigScan.launcher.fun.CameraAddAngle.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.launcher.fun.CameraAddAngle.module,
+                                                                         (char*)sigScan.launcher.fun.CameraAddAngle.pattern,
+                                                                         (char*)sigScan.launcher.fun.CameraAddAngle.mask);
+
+                                sigScan.launcher.fun.CameraAddOffset.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.launcher.fun.CameraAddOffset.module,
+                                                                         (char*)sigScan.launcher.fun.CameraAddOffset.pattern,
+                                                                         (char*)sigScan.launcher.fun.CameraAddOffset.mask);
+                                //-------------------
+
+                                sigScan.launcher.ins.InfiniteAmmo.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.launcher.ins.InfiniteAmmo.module,
+                                                                         (char*)sigScan.launcher.ins.InfiniteAmmo.pattern,
+                                                                         (char*)sigScan.launcher.ins.InfiniteAmmo.mask);
+
+                                sigScan.launcher.ins.RangeShovels.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.launcher.ins.RangeShovels.module,
+                                                                         (char*)sigScan.launcher.ins.RangeShovels.pattern,
+                                                                         (char*)sigScan.launcher.ins.RangeShovels.mask);
+
+                                sigScan.launcher.ins.AutomaticWeapon.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                                                                         (char*)sigScan.launcher.ins.AutomaticWeapon.module,
+                                                                         (char*)sigScan.launcher.ins.AutomaticWeapon.pattern,
+                                                                         (char*)sigScan.launcher.ins.AutomaticWeapon.mask);
+                             read = false;
+                            }
+                        }
+
                     }
 
                     if (threads->section[threads->typeGame].weaponSetting.isNoRecoil == true)
@@ -228,14 +385,17 @@ void DirectxFunctions::RenderDirectX()
                     bbaseAddress = false;
                 }
 
+                static DWORD playerData = 0x0;
                 if (threads->typeGame == 1)
                 {
+                    playerData = 0x134;
+
                     //isNoRecoil
                     if(threads->section[threads->typeGame].weaponSetting.isNoRecoil == true)
                     {
                         if(pachFun[threads->typeGame].isNoRecoil == true)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            if ((BYTE*)sigScan.steam.fun.CameraAddAngle.address != nullptr) mem::RetEx((BYTE*)sigScan.steam.fun.CameraAddAngle.address, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
                             pachFun[threads->typeGame].isNoRecoil = false;
                         }
                     }
@@ -243,7 +403,7 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isNoRecoil == false)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x7A76C0, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            if ((BYTE*)sigScan.steam.fun.CameraAddAngle.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.fun.CameraAddAngle.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
                             pachFun[threads->typeGame].isNoRecoil = true;
                         }
                     }
@@ -252,7 +412,7 @@ void DirectxFunctions::RenderDirectX()
                     if(threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true)
                     {
                         if(pachFun[threads->typeGame].isAutomaticWeapon == true){
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F != nullptr) mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F, 7, _blockpost->pHandle); //Делает всё оружие авто
+                            if ((BYTE*)sigScan.steam.ins.AutomaticWeapon.address != nullptr) mem::NopEx((BYTE*)sigScan.steam.ins.AutomaticWeapon.address, 7, _blockpost->pHandle); //Делает всё оружие авто
                             pachFun[threads->typeGame].isAutomaticWeapon = false;
                         }
                     }
@@ -260,7 +420,7 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isAutomaticWeapon == false)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x71BA7F, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
+                            if ((BYTE*)sigScan.steam.ins.AutomaticWeapon.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.ins.AutomaticWeapon.address, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
                             pachFun[threads->typeGame].isAutomaticWeapon = true;
                         }
                     }
@@ -270,7 +430,7 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isFreezing == true)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x719EE0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x719EE0, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            if ((BYTE*)sigScan.steam.fun.SetFreeze.address != nullptr) mem::RetEx((BYTE*)sigScan.steam.fun.SetFreeze.address, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
                             pachFun[threads->typeGame].isFreezing = false;
                         }
                     }
@@ -278,7 +438,7 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isFreezing == false)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x719EE0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x719EE0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            if ((BYTE*)sigScan.steam.fun.SetFreeze.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.fun.SetFreeze.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
                             pachFun[threads->typeGame].isFreezing = true;
                         }
                     }
@@ -288,8 +448,8 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isInfiniteAmmo == true)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x72192A != nullptr) mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x72192A, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр639  Local Убирает минус патроны
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
+                            if ((BYTE*)sigScan.steam.ins.InfiniteAmmo.address != nullptr) mem::NopEx((BYTE*)sigScan.steam.ins.InfiniteAmmo.address, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр639  Local Убирает минус патроны
+                            if ((BYTE*)sigScan.steam.fun.SendAttack.address != nullptr) mem::RetEx((BYTE*)sigScan.steam.fun.SendAttack.address, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
                             pachFun[threads->typeGame].isInfiniteAmmo = false;
                         }
                     }
@@ -297,8 +457,8 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isInfiniteAmmo == false)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x72192A != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x72192A, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x5EA5F0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
+                            if ((BYTE*)sigScan.steam.ins.InfiniteAmmo.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.ins.InfiniteAmmo.address, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
+                            if ((BYTE*)sigScan.steam.fun.SendAttack.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.fun.SendAttack.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
                             pachFun[threads->typeGame].isInfiniteAmmo = true;
                         }
                     }
@@ -309,7 +469,7 @@ void DirectxFunctions::RenderDirectX()
                         if(pachFun[threads->typeGame].isUnhookCamera == true)
                         {
                             //VWIK__CameraAddOffset
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A7790 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x7A7790, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+                            if ((BYTE*)sigScan.steam.fun.CameraAddOffset.address != nullptr) mem::RetEx((BYTE*)sigScan.steam.fun.CameraAddOffset.address, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
@@ -326,7 +486,7 @@ void DirectxFunctions::RenderDirectX()
                         if(pachFun[threads->typeGame].isUnhookCamera == false)
                         {
                             //VWIK__CameraAddOffset
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7A7790 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x7A7790, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+                            if ((BYTE*)sigScan.steam.fun.CameraAddOffset.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.fun.CameraAddOffset.address, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
@@ -341,9 +501,9 @@ void DirectxFunctions::RenderDirectX()
                     //isRangeShovels
                     if(threads->section[threads->typeGame].weaponSetting.isRangeShovels == true)
                     {
-                        if((BYTE*)_blockpost->module.GameAssembly + 0x72095B != nullptr)
+                        if((BYTE*)sigScan.steam.ins.RangeShovels.address != nullptr)
                         {
-                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x72095B, threads->section[threads->typeGame].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
+                            mem::PatchEx((BYTE*)sigScan.steam.ins.RangeShovels.address, threads->section[threads->typeGame].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
                             threads->section[threads->typeGame].weaponSetting.isRangeShovels = false;
                         }
                     }
@@ -352,71 +512,80 @@ void DirectxFunctions::RenderDirectX()
                 }
                 else if (threads->typeGame == 0)
                 {
+                    playerData = 0x138;
+
                     //isNoRecoil
                     if(threads->section[threads->typeGame].weaponSetting.isNoRecoil == true)
                     {
                         if(pachFun[threads->typeGame].isNoRecoil == true)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7CA0E0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x7CA0E0, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            if ((BYTE*)sigScan.launcher.fun.CameraAddAngle.address != nullptr) mem::RetEx((BYTE*)sigScan.launcher.fun.CameraAddAngle.address, 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
                             pachFun[threads->typeGame].isNoRecoil = false;
                         }
                     }
-                    else if(pachFun[threads->typeGame].isNoRecoil == false)
+                    else
                     {
-                        if ((BYTE*)_blockpost->module.GameAssembly + 0x7CA0E0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x7CA0E0, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
-                        pachFun[threads->typeGame].isNoRecoil = true;
+                        if(pachFun[threads->typeGame].isNoRecoil == false)
+                        {
+                            if ((BYTE*)sigScan.launcher.fun.CameraAddAngle.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.fun.CameraAddAngle.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //VWIK__CameraAddAngle  Убирает отдачу
+                            pachFun[threads->typeGame].isNoRecoil = true;
+                        }
                     }
-
 
                     //isAutomaticWeapon
                     if(threads->section[threads->typeGame].weaponSetting.isAutomaticWeapon == true)
                     {
-                        if(pachFun[threads->typeGame].isAutomaticWeapon == true)
-                        {
-                             if ((BYTE*)_blockpost->module.GameAssembly + 0x6AF99F != nullptr) mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x6AF99F, 7, _blockpost->pHandle); //Controll$$UpdateAttack Делает всё оружие авто
+                        if(pachFun[threads->typeGame].isAutomaticWeapon == true){
+                            if ((BYTE*)sigScan.launcher.ins.AutomaticWeapon.address != nullptr) mem::NopEx((BYTE*)sigScan.launcher.ins.AutomaticWeapon.address, 7, _blockpost->pHandle); //Делает всё оружие авто
                             pachFun[threads->typeGame].isAutomaticWeapon = false;
                         }
                     }
-                    else if(pachFun[threads->typeGame].isAutomaticWeapon == false)
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isAutomaticWeapon == false)
                         {
-                             if ((BYTE*)_blockpost->module.GameAssembly + 0x6AF99F != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x6AF99F, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
+                            if ((BYTE*)sigScan.launcher.ins.AutomaticWeapon.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.ins.AutomaticWeapon.address, (BYTE*)"\xC6\x80\xBC\x00\x00\x00\x01", 7, _blockpost->pHandle); //Делает всё оружие авто
                             pachFun[threads->typeGame].isAutomaticWeapon = true;
                         }
-
+                    }
 
                     //isFreezing
                     if(threads->section[threads->typeGame].miscSetting.isFreezing == true)
                     {
                         if(pachFun[threads->typeGame].isFreezing == true)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x6ADE00 != nullptr)mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x6ADE00, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            if ((BYTE*)sigScan.launcher.fun.SetFreeze.address != nullptr) mem::RetEx((BYTE*)sigScan.launcher.fun.SetFreeze.address, 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
                             pachFun[threads->typeGame].isFreezing = false;
                         }
                     }
-                    else  if(pachFun[threads->typeGame].isFreezing == false)
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isFreezing == false)
                         {
-                             if ((BYTE*)_blockpost->module.GameAssembly + 0x6ADE00 != nullptr)mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x6ADE00, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
+                            if ((BYTE*)sigScan.launcher.fun.SetFreeze.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.fun.SetFreeze.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //Controll__SetFreeze  Убирает замароску
                             pachFun[threads->typeGame].isFreezing = true;
                         }
-
+                    }
 
                     //isInfiniteAmmo
                     if(threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true)
                     {
                         if(pachFun[threads->typeGame].isInfiniteAmmo == true)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x6B5DC9 != nullptr)mem::NopEx((BYTE*)_blockpost->module.GameAssembly + 0x6B5DC9, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр622 Local Убирает минус патроны
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x5EB5B0 != nullptr)mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x5EB5B0, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
+                            if ((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address != nullptr) mem::NopEx((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address, 3, _blockpost->pHandle); //Controll__UpdateWeaponAttack-Стр639  Local Убирает минус патроны
+                            if ((BYTE*)sigScan.launcher.fun.SendAttack.address != nullptr) mem::RetEx((BYTE*)sigScan.launcher.fun.SendAttack.address, 1, _blockpost->pHandle); //Client__send_attack  Send Убирает минус патроны
                             pachFun[threads->typeGame].isInfiniteAmmo = false;
                         }
                     }
-                    else if(pachFun[threads->typeGame].isInfiniteAmmo == false)
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isInfiniteAmmo == false)
                         {
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x6B5DC9 != nullptr)mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x6B5DC9, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x5EB5B0 != nullptr)mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x5EB5B0, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
+                            if ((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
+                            if ((BYTE*)sigScan.launcher.fun.SendAttack.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.fun.SendAttack.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
                             pachFun[threads->typeGame].isInfiniteAmmo = true;
                         }
-
+                    }
 
                     //isUnhookCamera
                     if(threads->section[threads->typeGame].miscSetting.isUnhookCamera == true)
@@ -424,7 +593,7 @@ void DirectxFunctions::RenderDirectX()
                         if(pachFun[threads->typeGame].isUnhookCamera == true)
                         {
                             //VWIK__CameraAddOffset
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7CA1B0 != nullptr) mem::RetEx((BYTE*)_blockpost->module.GameAssembly + 0x7CA1B0, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+                            if ((BYTE*)sigScan.launcher.fun.CameraAddOffset.address != nullptr) mem::RetEx((BYTE*)sigScan.launcher.fun.CameraAddOffset.address, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
@@ -433,12 +602,15 @@ void DirectxFunctions::RenderDirectX()
                                 WriteProcessMemory(_blockpost->pHandle, (LPCVOID*)(ptrCameraFly), &_blockpost->player.fly, 4, nullptr);
                                 pachFun[threads->typeGame].isUnhookCamera = false;
                             }
+
                         }
                     }
-                    else if(pachFun[threads->typeGame].isUnhookCamera == false)
+                    else
+                    {
+                        if(pachFun[threads->typeGame].isUnhookCamera == false)
                         {
                             //VWIK__CameraAddOffset
-                            if ((BYTE*)_blockpost->module.GameAssembly + 0x7CA1B0 != nullptr) mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x7CA1B0, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
+                            if ((BYTE*)sigScan.launcher.fun.CameraAddOffset.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.fun.CameraAddOffset.address, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
                             DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
@@ -448,17 +620,19 @@ void DirectxFunctions::RenderDirectX()
                                 pachFun[threads->typeGame].isUnhookCamera = true;
                             }
                         }
-
+                    }
 
                     //isRangeShovels
-                    if(threads->section[0].weaponSetting.isRangeShovels == true)
+                    if(threads->section[threads->typeGame].weaponSetting.isRangeShovels == true)
                     {
-//                        if(((BYTE*)_blockpost->module.GameAssembly + 0x6B4DFA) != nullptr)
-//                        {
-//                            mem::PatchEx((BYTE*)_blockpost->module.GameAssembly + 0x6B4DFA, threads->section[0].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
-//                            threads->section[0].weaponSetting.isRangeShovels = false;
-//                        }
+                        if((BYTE*)sigScan.launcher.ins.RangeShovels.address != nullptr)
+                        {
+                            mem::PatchEx((BYTE*)sigScan.launcher.ins.RangeShovels.address, threads->section[threads->typeGame].weaponSetting.wrangeShovels, 7, _blockpost->pHandle); //Controll$$UpdateShovelAttack
+                            threads->section[threads->typeGame].weaponSetting.isRangeShovels = false;
+                        }
                     }
+
+
                 }
 
 
@@ -471,16 +645,16 @@ void DirectxFunctions::RenderDirectX()
                     _blockpost->matrix.viewMatrix16[3] = _blockpost->matrix.viewMatrix44[0][3], _blockpost->matrix.viewMatrix16[7] = _blockpost->matrix.viewMatrix44[1][3], _blockpost->matrix.viewMatrix16[11] = _blockpost->matrix.viewMatrix44[2][3], _blockpost->matrix.viewMatrix16[15] = _blockpost->matrix.viewMatrix44[3][3];
                 }
 
-                DWORD ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0x134, 0x148 });
+                DWORD ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, playerData, 0x148 });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerDeath), &_blockpost->player.death, 4, nullptr);
                 if (ptrPlayerDeath  != 0x148 &&_blockpost->player.death == 5)
                     pachFun[threads->typeGame].isUnhookCamera = true;
 
 
-                DWORD ptrPlayerTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x134, 0x14 });
+                DWORD ptrPlayerTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, playerData, 0x14 });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerTeam), &_blockpost->player.team, 4, nullptr);
 
-                DWORD ptrPlayerTeamZombie = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x134, 0x2C });
+                DWORD ptrPlayerTeamZombie = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, playerData, 0x2C });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerTeamZombie), &_blockpost->player.teamZombie, 4, nullptr);
 
                 if (threads->typeGame == 1)
@@ -592,13 +766,14 @@ void DirectxFunctions::RenderDirectX()
                            continue;
                        }
 
-                       DWORD ptrGUIInv= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.GUIInv, { 0x5C, 0x5C, 0xC, 0x10 });
-                       ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrGUIInv), &_blockpost->entity[i].armor, 4, nullptr);
-                       if ((LPCVOID)(ptrGUIInv == 0x10))
-                       {
-                           entityDist += 0x4;
-                           continue;
-                       }
+//                       DWORD ptrGUIInv= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.GUIInv, { 0x5C, 0x5C, 0xC, 0x10 });
+//                       ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrGUIInv), &_blockpost->entity[i].armor, 4, nullptr);
+//                       if ((LPCVOID)(ptrGUIInv == 0x10))
+//                       {
+//                           entityDist += 0x4;
+//                           continue;
+//                       }
+
 
 
                        if (_blockpost->server.gamemode != 2 && _blockpost->server.gamemode != 5 && _blockpost->server.gamemode != 8)
@@ -609,7 +784,8 @@ void DirectxFunctions::RenderDirectX()
                                continue;
                            }
                        }
-                       else if (_blockpost->server.gamemode == 5)
+
+                       if (_blockpost->server.gamemode == 5)
                        {
                            if(_blockpost->player.teamZombie == _blockpost->entity[i].teamZombie)
                            {
@@ -687,7 +863,6 @@ void DirectxFunctions::RenderDirectX()
 
 //        DirectX.Device->Clear(0, 0, D3DCLEAR_TARGET, 0, 1.0f, 0);
     }
-
 
 
 }

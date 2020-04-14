@@ -39,6 +39,7 @@ SOURCES += \
     maths_functions.cpp \
     mem.cpp \
     overlay.cpp \
+    signaturescanner.cpp \
     threadmem.cpp \
     threads.cpp \
     toolshack.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     maths_functions.h \
     mem.h \
     overlay.h \
+    signaturescanner.h \
     threadmem.h \
     threads.h \
     toolshack.h \
