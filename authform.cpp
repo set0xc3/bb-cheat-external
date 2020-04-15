@@ -11,6 +11,11 @@
 #include <QtAwesome.h>
 #include <QSslSocket>
 
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+
 
 static  website *web = new website();
 static Blockpost* blockpost = new Blockpost;
@@ -181,6 +186,10 @@ void AuthForm::authFormSlot()
 
 void AuthForm::threadUpdate()
 {
+    if (IsDebuggerPresent())
+    {
+        exit(0);
+    }
     web->auth(web->userData.name, GetCipher::Decrypted(web->userData.password));
 }
 
@@ -743,26 +752,23 @@ void AuthForm::on_rangeShovelsSlider_sliderMoved(int position)
      threads->section[threads->typeGame].weaponSetting.rangeShovels = position;
      ui->rangeShovelsLabel->setNum(position);
 
-     if (threads->typeGame == 1)
-     {
-         if (position == 3)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x40\x40";
-         if (position == 4)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x80\x40";
-         if (position == 5)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xA0\x40";
-         if (position == 6)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xC0\x40";
-         if (position == 7)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xE0\x40";
-         if (position == 8)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x00\x41";
-         if (position == 9)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x10\x41";
-         if (position == 10)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x20\x41";
-         if (position == 11)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x30\x41";
-         if (position == 12)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x40\x41";
-         if (position == 13)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x50\x41";
-         if (position == 14)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x60\x41";
-         if (position == 15)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x70\x41";
-         if (position == 16)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x80\x41";
-         if (position == 17)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x90\x41";
-         if (position == 19)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x98\x41";
-         if (position == 20)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xA0\x41";
-     }
+     if (position == 3)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x40\x40";
+     if (position == 4)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x80\x40";
+     if (position == 5)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xA0\x40";
+     if (position == 6)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xC0\x40";
+     if (position == 7)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xE0\x40";
+     if (position == 8)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x00\x41";
+     if (position == 9)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x10\x41";
+     if (position == 10)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x20\x41";
+     if (position == 11)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x30\x41";
+     if (position == 12)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x40\x41";
+     if (position == 13)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x50\x41";
+     if (position == 14)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x60\x41";
+     if (position == 15)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x70\x41";
+     if (position == 16)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x80\x41";
+     if (position == 17)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x90\x41";
+     if (position == 19)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x98\x41";
+     if (position == 20)threads->section[threads->typeGame].weaponSetting.wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\xA0\x41";
 }
 
 void AuthForm::on_smoothnessSlider_sliderMoved(int position)

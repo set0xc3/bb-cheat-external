@@ -19,34 +19,34 @@ public:
     {
         struct module
         {
-            struct PLH
+            struct PLH // PLH$$Audio_fs_water
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xA1\x00\x00\x00\x00\x83\xC4\x04\xD9\x5D\xFC\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\xF3\x0F\x10\x45\xFC\x56\x57\xF3\x0F\x11\x40\x34";
-                const char* mask = "x????xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x8B\x40\x1C\x85\xC0\x0F\x84\x00\x00\x00\x00\x3B\x70\x0C\x0F\x83";
+                const char* mask = "x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxx????xxxxx";
                 DWORD address;
             };
             PLH PLH;
 
-            struct VWIK
+            struct VWIK // Client$$recv_detonate
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x89\x30\xA1\x00\x00\x00\x00\x8B\x40\x5C\x8B\x90\x38\x01\x00\x00";
-                const char* mask = "x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxx????xxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x0F\x83\x78\x70\x00\x75\x09\x50\xE8\x00\x00\x00\x00\x83\xC4\x04\xF3\x0F\x10\x45\xF0";
+                const char* mask = "x????xxxxxxxxxxxxxxxxx????xxxxxxxx";
                 DWORD address;
             };
             VWIK VWIK;
 
-            struct Controll
+            struct Controll // Controll$$AddFXAA
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xA1\x00\x00\x00\x00\x83\xC4\x20\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x6A\x00\xFF\xB0\x38\x01\x00\x00";
-                const char* mask = "x????xxxxxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x56\x8B\x70\x08\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x0F\x83\x78\x70\x00\x75\x09\x50\xE8\x00\x00\x00\x00\x83\xC4\x04\x6A\x00\x6A\x00\x56\xE8\x00\x00\x00\x00\x83\xC4\x0C\x5E\x84\xC0\x75\x72";
+                const char* mask = "x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxxx????xxxxxxxxxxxxxxxxx????xxxxxxxxx????xxxxxxxx";
                 DWORD address;
             };
             Controll Controll;
 
-            struct MainManager
+            struct MainManager // MainManager$$_cctor
             {
                 const char* module = "GameAssembly.dll";
                 const char* pattern = "\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC7\x00\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x04\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x05\x00";
@@ -55,11 +55,11 @@ public:
             };
             MainManager MainManager;
 
-            struct GUIInv
+            struct GUIInv // GUIInv$$_cctor
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\x8B\x00\x00\x00\x00\x00\xF6\x81\xBF\x00\x00\x00\x02\x74\x15\x83\x79\x70\x00\x75\x0F\x51\xE8\x00\x00\x00\x00\x8B\x00\x00\x00\x00\x00\x83\xC4\x04\x8B\x41\x5C\x80\x38\x00\x74\x41";
-                const char* mask = "x?????xxxxxxxxxxxxxxxxx????x?????xxxxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x00\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x01\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x02\x00\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02";
+                const char* mask = "x????xxxxxxx????xxxxxxxx????xxxxxxxx????xxxxxxx";
                 DWORD address;
             };
             GUIInv GUIInv;
@@ -69,6 +69,7 @@ public:
 
         struct functions
         {
+            // +
             struct CameraAddAngle // VWIK$$CameraAddAngle
             {
                 const char* module = "GameAssembly.dll";
@@ -78,6 +79,7 @@ public:
             };
             CameraAddAngle CameraAddAngle;
 
+            // +
             struct SetFreeze // Controll$$SetFreeze
             {
                 const char* module = "GameAssembly.dll";
@@ -87,6 +89,7 @@ public:
             };
             SetFreeze SetFreeze;
 
+             // +
             struct SendAttack // Client$$send_attack
             {
                 const char* module = "GameAssembly.dll";
@@ -96,6 +99,7 @@ public:
             };
             SendAttack SendAttack;
 
+            // +
             struct CameraAddOffset // VWIK$$CameraAddOffset
             {
                 const char* module = "GameAssembly.dll";
@@ -110,6 +114,7 @@ public:
 
         struct instructions
         {
+             // +
             struct AutomaticWeapon // Controll&&UpdateAttack
             {
                 const char* module = "GameAssembly.dll";
@@ -119,15 +124,17 @@ public:
             };
             AutomaticWeapon AutomaticWeapon;
 
+             // +
             struct InfiniteAmmo // Controll$$UpdateWeaponAttack
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xFF\x88\xC0\x00\x00\x00";
+                const char* pattern = "\xFF\x48\x28\x8B\x40\x28";
                 const char* mask = "xxxxxx";
                 DWORD address;
             };
             InfiniteAmmo InfiniteAmmo;
 
+             // +
             struct RangeShovels // Controll$$UpdateShovelAttack
             {
                 const char* module = "GameAssembly.dll";
@@ -146,47 +153,47 @@ public:
     {
         struct module
         {
-            struct PLH
+            struct PLH // PLH$$Audio_fs_water
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xA1\x00\x00\x00\x00\x83\xC4\x04\xD9\x5D\xFC\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\xF3\x0F\x10\x45\xFC\x56\x57\xF3\x0F\x11\x40\x30";
-                const char* mask = "x????xxxxxxxxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x8B\x40\x1C\x85\xC0\x0F\x84\x00\x00\x00\x00\x3B\x70\x0C\x0F\x83";
+                const char* mask = "x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxx????xxxxx";
                 DWORD address;
             };
             PLH PLH;
 
-            struct VWIK
+            struct VWIK // Client$$recv_detonate
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x89\x30\xA1\x00\x00\x00\x00\x8B\x40\x5C\x8B\x90\x34\x01\x00\x00";
-                const char* mask = "x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxx????xxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x0F\x83\x78\x70\x00\x75\x09\x50\xE8\x00\x00\x00\x00\x83\xC4\x04\xF3\x0F\x10\x45\xF0";
+                const char* mask = "x????xxxxxxxxxxxxxxxxx????xxxxxxxx";
                 DWORD address;
             };
             VWIK VWIK;
 
-            struct Controll
+            struct Controll // Controll$$AddFXAA
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xA1\x00\x00\x00\x00\x83\xC4\x20\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x6A\x00\xFF\xB0\x34\x01\x00\x00";
-                const char* mask = "x????xxxxxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x56\x8B\x70\x08\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x0F\x83\x78\x70\x00\x75\x09\x50\xE8\x00\x00\x00\x00\x83\xC4\x04\x6A\x00\x6A\x00\x56\xE8\x00\x00\x00\x00\x83\xC4\x0C\x5E\x84\xC0\x75\x72";
+                const char* mask = "x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxxx????xxxxxxxxxxxxxxxxx????xxxxxxxxx????xxxxxxxx";
                 DWORD address;
             };
             Controll Controll;
 
-            struct MainManager
+            struct MainManager // MainManager$$_cctor
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\x8B\x00\x00\x00\x00\x00\x83\xC4\x2C\xF6\x81\xBF\x00\x00\x00\x02\x74\x15\x83\x79\x70\x00\x75\x0F\x51\xE8\x00\x00\x00\x00\x8B\x00\x00\x00\x00\x00\x83\xC4\x04\x8B\x41\x5C\x80\x78\x05\x00";
-                const char* mask = "x?????xxxxxxxxxxxxxxxxxxxx????x?????xxxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC7\x00\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x04\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x05\x00";
+                const char* mask = "x????xxxxxxxxxx????xxxxxxxx????xxxxxxx";
                 DWORD address;
             };
             MainManager MainManager;
 
-            struct GUIInv
+            struct GUIInv // GUIInv$$_cctor
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\x8B\x00\x00\x00\x00\x00\xF6\x81\xBF\x00\x00\x00\x02\x74\x15\x83\x79\x70\x00\x75\x0F\x51\xE8\x00\x00\x00\x00\x8B\x00\x00\x00\x00\x00\x83\xC4\x04\x8B\x41\x5C\x80\x38\x00\x74\x41";
-                const char* mask = "x?????xxxxxxxxxxxxxxxxx????x?????xxxxxxxxxxx";
+                const char* pattern = "\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x00\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x01\x00\xA1\x00\x00\x00\x00\x8B\x40\x5C\xC6\x40\x02\x00\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02";
+                const char* mask = "x????xxxxxxx????xxxxxxxx????xxxxxxxx????xxxxxxx";
                 DWORD address;
             };
             GUIInv GUIInv;
@@ -196,6 +203,7 @@ public:
 
         struct functions
         {
+            // +
             struct CameraAddAngle // VWIK$$CameraAddAngle
             {
                 const char* module = "GameAssembly.dll";
@@ -205,15 +213,17 @@ public:
             };
             CameraAddAngle CameraAddAngle;
 
+            // +
             struct SetFreeze // Controll$$SetFreeze
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\x55\x8B\xEC\x51\x80\x3D\x00\x00\x00\x00\x00\x75\x15\xFF\x35\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x83\xC4\x04\xC6\x05\x00\x00\x00\x00\x00\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x56\x6A\x00\xC6\x80\x28\x01\x00\x00\x01\xE8";
-                const char* mask = "xxxxxx?????xxxx????x????xxxxx?????x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxxxxxx";
+                const char* pattern = "\x55\x8B\xEC\x51\x80\x3D\x00\x00\x00\x00\x00\x75\x15\xFF\x35\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x83\xC4\x04\xC6\x05\x00\x00\x00\x00\x00\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x56\x6A\x00\xC6\x80\x28\x01\x00\x00\x01";
+                const char* mask = "xxxxxx?????xxxx????x????xxxxx?????x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxxxxxxxx";
                 DWORD address;
             };
             SetFreeze SetFreeze;
 
+             // +
             struct SendAttack // Client$$send_attack
             {
                 const char* module = "GameAssembly.dll";
@@ -223,11 +233,12 @@ public:
             };
             SendAttack SendAttack;
 
+            // +
             struct CameraAddOffset // VWIK$$CameraAddOffset
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\x55\x8B\xEC\x80\x3D\x00\x00\x00\x00\x00\x75\x15\xFF\x35\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x83\xC4\x04\xC6\x05\x00\x00\x00\x00\x00\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x56\x57\xFF\x35\x00\x00\x00\x00\x8B\x78\x48\xE8\x00\x00\x00\x00\xF3\x0F\x10\x45\x14\x8B\xF0\xF3\x0F\x58\x45\x18\x6A\x00\x56\xF3\x0F\x11\x45\x18\xE8\x00\x00\x00\x00\xF3\x0F\x7E\x45\x08\x83\xC4\x0C\xF3\x0F\x10\x4D\x18\x8B\x45\x10\x66\x0F\xD6\x46\x08\xF3\x0F\x10\x45\x14\xF3\x0F\x11\x4E\x24\xF3\x0F\x5C\xC8\x89\x46\x10\x8A\x45\x1C\xF3\x0F\x11\x46\x20\xC7\x46\x2C\x04\x00\x00\x00\xF3\x0F\x11\x4E\x28\x88\x46\x30";
-                const char* mask = "xxxxx?????xxxx????x????xxxxx?????x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+                const char* pattern = "\x55\x8B\xEC\x80\x3D\x00\x00\x00\x00\x00\x75\x15\xFF\x35\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x83\xC4\x04\xC6\x05\x00\x00\x00\x00\x00\xA1\x00\x00\x00\x00\xF6\x80\xBF\x00\x00\x00\x02\x74\x14\x83\x78\x70\x00\x75\x0E\x50\xE8\x00\x00\x00\x00\xA1\x00\x00\x00\x00\x83\xC4\x04\x8B\x40\x5C\x56\x57\xFF\x35\x00\x00\x00\x00\x8B\x78\x48\xE8\x00\x00\x00\x00\xF3\x0F\x10\x45\x14\x8B\xF0\xF3\x0F\x58\x45\x18\x6A\x00\x56\xF3\x0F\x11\x45\x18\xE8\x00\x00\x00\x00\xF3\x0F\x7E\x45\x08\x83\xC4\x0C\xF3\x0F\x10\x4D\x18\x8B\x45\x10\x66\x0F\xD6\x46\x08\xF3\x0F\x10\x45\x14\xF3\x0F\x11\x4E\x24\xF3\x0F\x5C\xC8\x89\x46\x10\x8A\x45\x1C\xF3\x0F\x11\x46\x20\xC7\x46\x2C\x04\x00\x00\x00";
+                const char* mask = "xxxxx?????xxxx????x????xxxxx?????x????xxxxxxxxxxxxxxxxx????x????xxxxxxxxxx????xxxx????xxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
                 DWORD address;
             };
             CameraAddOffset CameraAddOffset;
@@ -237,6 +248,7 @@ public:
 
         struct instructions
         {
+            // +
             struct AutomaticWeapon // Controll&&UpdateAttack
             {
                 const char* module = "GameAssembly.dll";
@@ -246,15 +258,17 @@ public:
             };
             AutomaticWeapon AutomaticWeapon;
 
+            // +
             struct InfiniteAmmo // Controll$$UpdateWeaponAttack
             {
                 const char* module = "GameAssembly.dll";
-                const char* pattern = "\xFF\x4E\x28";
-                const char* mask = "xxx";
+                const char* pattern = "\xFF\x48\x28\x8B\x40\x28";
+                const char* mask = "xxxxxx";
                 DWORD address;
             };
             InfiniteAmmo InfiniteAmmo;
 
+            // +
             struct RangeShovels // Controll$$UpdateShovelAttack
             {
                 const char* module = "GameAssembly.dll";

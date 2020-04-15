@@ -7,6 +7,7 @@ static Blockpost* blockpost = nullptr;
 static Threads* threads = nullptr;
 
 
+
 ThreadMem::ThreadMem(Blockpost *_blockpost, Threads* _threads)
 {
     blockpost = _blockpost;
@@ -18,6 +19,10 @@ void ThreadMem::Update()
     ThreadMem::msleep(500);
     while(true)
     {
+        if (IsDebuggerPresent())
+        {
+            exit(0);
+        }
 
 //        qDebug() << "threads->isActive:" << threads->isActive;
 //        qDebug() << "threads->typeGame:" << threads->typeGame;

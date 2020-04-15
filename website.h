@@ -48,7 +48,7 @@ public:
         QString name;
         QByteArray password;
         QByteArray version;
-        QByteArray versionBuff = "XCE3o8zizPO12zwpBUbsky+DSTIorfMi226JJ+s/akWWuXN8LsBZ95mysY6e3lVw9TaaTMZ0jxDEbdAmqphPPD5nIhuSMtBg1jwnv/jovdhTCXrVPFvdJRPSNDuD3DysC4/wmB3Kqn42BP98fxiVGa5/pCQW5I9lAGjbXlLOH1ZO4i6G1aLAXmjWTETfYt9nNYoKEAL9jfg7QVbd/WEDmCF3ZY/h7ZXNxw/qrzc0XtNSqn1Om5B9PWd0mUmhnMkSC4N+XaVKgdALS+v1ZDy4P+c97zmSWkZbJTOjb6OQ2j2SCD87a7jyr0e51QoVEiRAJqJiSw/FLiRUQVC3OWxmQw==";
+        QByteArray versionBuff = "4rs9gM2ARr+C6rhAyxHOytr80puCJdxO7ERjdCD++1byR0xbeq2UxS4qIXFvbD1UV1fs43u1lztlhU8cvTbnCJO0LMM7A8ieIoaKmgq1+A8MG5P90akPdeXxxQ1v86nVcyrvm7H2Nw24Sa3ne4mfAzEvTCdrt0TLGXAA+85uqR1PNN4dggXDtNyA4LkSN7NKUnnlM7lV9xxU0Jd3pAsG4OU7ZbV+1scDO0PJKp1UgsWAGXtfzTCsKcpTrcuIZF18gI3bNLfTTqazIhYLkSG4tV6zxKX4D2S2KqWwsI/E/kb22MhcSARwpnXBNyOJYkRq5hmbZozUPmlOY8QR7UodLw==";
 
         QByteArray servercommBuff = "a/The3CW+rTkyNrMzDTtz+I/NTryxd2r/bweQTxjQaf5H9OKi0hl3Uvm/yMeDAx7STFzfqWKO0wLTAzzJriKhUcTFGZMIND6VxF5Y0BrVbk4mXdihBez7F0z/7ET0VsamHCChriuqz2Wul06Tr3pQuA4bz77MQ3vW4+9/qhcRXJKXLRX5mIxWfv2xLmuyGiiW1E/Bj+McmspcmQvaGHc9hJX++ozeugbKPP2K6ZvA0mg4KjjEOslk2GE/wXTu47fryCpHtFr6fIzMyfJhuJY5fP7hTir5RmJPNJfv52mdRudb98Xssw/LsAw0kl/eTghU5ortpgk2AL7K117Av5PLw==";
         QByteArray servercomm;

@@ -115,6 +115,8 @@ char buffer[256] ;
 
 static bool bHandle = true;
 static bool bbaseAddress = true;
+static bool SteamRead = true;
+static bool LauncherRead = true;
 
 struct PachFunctions
 {
@@ -152,24 +154,26 @@ void DirectxFunctions::RenderDirectX()
 //        std::cin.get();
     }
 
-
-
-
     if (isBlockpost  == false)
     {
         DirectX.Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00000000, 1.0f, 0);
         DirectX.Device->BeginScene();
 
 
-        if (threads->isActive == true){
-
-        if (Target.Window == nullptr || threads->switchGame == true)
+        if (threads->isActive == true)
         {
-            bHandle = true;
-            bbaseAddress = true;
-            threads->switchGame = false;
-        }
+            if (ToolsHack::GetAppstat(nullptr, "BLOCKPOST")  == -1 || threads->switchGame == true)
+            {
+                bHandle = true;
+                bbaseAddress = true;
+                threads->switchGame = false;
+            }
 
+            if (ToolsHack::GetAppstat(nullptr, "BLOCKPOST")  == -1)
+            {
+                SteamRead = true;
+                LauncherRead = true;
+            }
 
         if (ToolsHack::GetAppstat(nullptr, "BLOCKPOST") == 1 && GetForegroundWindow() == Target.Window)
         {
@@ -180,6 +184,9 @@ void DirectxFunctions::RenderDirectX()
         {
             _blockpost->pID = pid;
             _blockpost->pHandle = pHandle;
+
+
+//            qDebug() << sigScan.steam.fun.SetFreeze.address;
 
             //BLOCKPOST
             {
@@ -206,8 +213,7 @@ void DirectxFunctions::RenderDirectX()
                 {
                     if (threads->typeGame == 1) //Если это Steam
                     {
-                        static bool read = true;
-                        if (read == true)
+                        if (SteamRead == true)
                         {
                             _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                        (char*)sigScan.steam.module.PLH.module,
@@ -273,15 +279,14 @@ void DirectxFunctions::RenderDirectX()
                                                                          (char*)sigScan.steam.ins.AutomaticWeapon.module,
                                                                          (char*)sigScan.steam.ins.AutomaticWeapon.pattern,
                                                                          (char*)sigScan.steam.ins.AutomaticWeapon.mask);
-                             read = false;
+                             SteamRead = false;
                             }
                         }
 
                     }
                     else  //Если это VK
                     {
-                        static bool read = true;
-                        if (read == true)
+                        if (LauncherRead == true)
                         {
                             _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                        (char*)sigScan.launcher.module.PLH.module,
@@ -347,7 +352,7 @@ void DirectxFunctions::RenderDirectX()
                                                                          (char*)sigScan.launcher.ins.AutomaticWeapon.module,
                                                                          (char*)sigScan.launcher.ins.AutomaticWeapon.pattern,
                                                                          (char*)sigScan.launcher.ins.AutomaticWeapon.mask);
-                             read = false;
+                             LauncherRead = false;
                             }
                         }
 
@@ -383,12 +388,28 @@ void DirectxFunctions::RenderDirectX()
                     threads->section[1].weaponSetting.isRangeShovels = true;
 
                     bbaseAddress = false;
+
+//                    qDebug() << "PLH:" << (LPCVOID)_blockpost->baseAddress.PLH;
+//                    qDebug() << "Controll:" << (LPCVOID)_blockpost->baseAddress.Controll;
+//                    qDebug() << "VWIK:" << (LPCVOID)_blockpost->baseAddress.VWIK;
+//                    qDebug() << "GUIInv:" << (LPCVOID)_blockpost->baseAddress.GUIInv;
+//                    qDebug() << "MainManager:" << (LPCVOID)_blockpost->baseAddress.MainManager << "\n";
+
+//                    qDebug() << "InfiniteAmmo:" << (LPCVOID)sigScan.steam.ins.InfiniteAmmo.address;
+//                    qDebug() << "RangeShovels:" << (LPCVOID)sigScan.steam.ins.RangeShovels.address;
+//                    qDebug() << "AutomaticWeapon:" << (LPCVOID)sigScan.steam.ins.AutomaticWeapon.address << "\n";
+
+//                    qDebug() << "InfiniteAmmo:" << (LPCVOID)sigScan.launcher.ins.InfiniteAmmo.address;
+//                    qDebug() << "RangeShovels:" << (LPCVOID)sigScan.launcher.ins.RangeShovels.address;
+//                    qDebug() << "AutomaticWeapon:" << (LPCVOID)sigScan.launcher.ins.AutomaticWeapon.address << "\n";
+
                 }
 
                 static DWORD playerData = 0x0;
                 if (threads->typeGame == 1)
                 {
-                    playerData = 0x134;
+
+                    playerData = 0x138;
 
                     //isNoRecoil
                     if(threads->section[threads->typeGame].weaponSetting.isNoRecoil == true)
@@ -443,6 +464,7 @@ void DirectxFunctions::RenderDirectX()
                         }
                     }
 
+                    // Будет часто ломатся
                     //isInfiniteAmmo
                     if(threads->section[threads->typeGame].weaponSetting.isInfiniteAmmo == true)
                     {
@@ -457,7 +479,7 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isInfiniteAmmo == false)
                         {
-                            if ((BYTE*)sigScan.steam.ins.InfiniteAmmo.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.ins.InfiniteAmmo.address, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
+                            if ((BYTE*)sigScan.steam.ins.InfiniteAmmo.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.ins.InfiniteAmmo.address, (BYTE*)"\xFF\x48\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
                             if ((BYTE*)sigScan.steam.fun.SendAttack.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.fun.SendAttack.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
                             pachFun[threads->typeGame].isInfiniteAmmo = true;
                         }
@@ -581,7 +603,7 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if(pachFun[threads->typeGame].isInfiniteAmmo == false)
                         {
-                            if ((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address, (BYTE*)"\xFF\x4E\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
+                            if ((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.ins.InfiniteAmmo.address, (BYTE*)"\xFF\x48\x28", 3, _blockpost->pHandle); //Local Убирает минус патроны
                             if ((BYTE*)sigScan.launcher.fun.SendAttack.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.fun.SendAttack.address, (BYTE*)"\x55", 1, _blockpost->pHandle); //Send Убирает минус патроны
                             pachFun[threads->typeGame].isInfiniteAmmo = true;
                         }
@@ -659,7 +681,7 @@ void DirectxFunctions::RenderDirectX()
 
                 if (threads->typeGame == 1)
                 {
-                    DWORD ptrGamemode= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x1FC });
+                    DWORD ptrGamemode= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x204 });
                     ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrGamemode), &_blockpost->server.gamemode, 4, nullptr);
                 }
                 else if (threads->typeGame == 0)
