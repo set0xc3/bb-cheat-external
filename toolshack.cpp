@@ -4,7 +4,7 @@
 #include "QDebug"
 
 
-DWORD ToolsHack::GetModuleBaseAddress(TCHAR *lpszModuleName, DWORD pID)
+uintptr_t ToolsHack::GetModuleBaseAddress(TCHAR *lpszModuleName, uintptr_t pID)
 {
         uintptr_t modBaseAddr = 0;
         HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pID);

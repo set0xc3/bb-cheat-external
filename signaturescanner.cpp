@@ -176,13 +176,13 @@ BOOL Scanner::ComparePattern(HANDLE pHandle, DWORD address, char *pattern, char 
         return true;
 }
 
-DWORD Scanner::ExternalAoBScan(HANDLE pHandle, DWORD pID, char *mod, char *pattern, char *mask)
+uintptr_t Scanner::ExternalAoBScan(HANDLE pHandle, uintptr_t pID, char *mod, char *pattern, char *mask)
 {
-        std::vector<DWORD> matches;																		// Create a vector to store all our results in
-        DWORD patternSize = strlen(mask);																// Store the length of the pattern
+        std::vector<uintptr_t> matches;																		// Create a vector to store all our results in
+        uintptr_t patternSize = strlen(mask);																// Store the length of the pattern
 
-        DWORD moduleBase = GetModuleBaseAddress(pID, mod);												// Get the base address of the module
-        DWORD moduleSize = GetModuleSize(pID, mod);														// Get the size of the module
+        uintptr_t moduleBase = GetModuleBaseAddress(pID, mod);												// Get the base address of the module
+        uintptr_t moduleSize = GetModuleSize(pID, mod);														// Get the size of the module
 
         if (!moduleBase || !moduleSize) {																// If either GetModuleBaseAddress or GetModuleSize returned NULL
             std::cout << "Could not get " << mod << " base address or size" << std::endl;				// Let the user know

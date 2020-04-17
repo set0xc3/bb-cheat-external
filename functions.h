@@ -20,15 +20,15 @@ struct vec2
 
 namespace ProcessFunctions
 {
-    template < class TypeValue > TypeValue ReadMemory(DWORD Address);
-    template < class TypeValue > TypeValue WriteMemory(DWORD Address);
+    template < class TypeValue > TypeValue ReadMemory(uintptr_t Address);
+    template < class TypeValue > TypeValue WriteMemory(uintptr_t Address);
     void CheckDWM();
     DWORD GetModuleBase(DWORD dwProcessIdentifier, TCHAR *lpszModuleName);
     HANDLE GetHandle();
 }
 
 template <class TypeValue>
-TypeValue ProcessFunctions::ReadMemory(DWORD Address)
+TypeValue ProcessFunctions::ReadMemory(uintptr_t Address)
 {
     TypeValue Value;
     ReadProcessMemory(pHandle, (LPCVOID*)Address, &Value, sizeof(TypeValue), 0);
@@ -36,7 +36,7 @@ TypeValue ProcessFunctions::ReadMemory(DWORD Address)
 }
 
 template <class TypeValue>
-TypeValue ProcessFunctions::WriteMemory(DWORD Address)
+TypeValue ProcessFunctions::WriteMemory(uintptr_t Address)
 {
     TypeValue Value;
     WriteProcessMemory(pHandle, (LPCVOID*)Address, &Value, sizeof(TypeValue), 0);
