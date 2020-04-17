@@ -19,9 +19,9 @@ public:
 
     struct Module
     {
-        DWORD SteamСlient;
-        DWORD UnityPlayer;
-        DWORD GameAssembly;
+        BYTE* SteamСlient;
+        BYTE* UnityPlayer;
+        BYTE* GameAssembly;
     };
     Module module;
 
@@ -38,12 +38,13 @@ public:
 
     struct BaseAddress
     {
+        BYTE* bPLH;
         DWORD PLH;
         DWORD VWIK;
         DWORD Controll;
         DWORD MainManager;
         DWORD GUIInv;
-        DWORD MatrixBegin;
+        BYTE* MatrixBegin;
         DWORD Players;
     };
     BaseAddress baseAddress;
