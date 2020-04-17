@@ -46,7 +46,7 @@ directx_t DirectX;
 
 
 
-uintptr_t FrameCnt;
+DWORD FrameCnt;
 float TimeElapsed;
 float FPS;
 float oldTime;
@@ -55,7 +55,7 @@ float deltatime;
 
 void CalcFPS()
 {
-    static uintptr_t LastTime = timeGetTime();
+    static DWORD LastTime = timeGetTime();
 
     FrameCnt++;
     TimeElapsed += timeGetTime() - LastTime;
@@ -134,7 +134,7 @@ void DirectxFunctions::RenderDirectX()
     {
 //        char process[] = "BLOCKPOST.exe";
 
-//        uintptr_t pID = Scanner::GetPID(process);
+//        DWORD pID = Scanner::GetPID(process);
 //        if (!pID) {
 //            std::cout << "Could not find process" << std::endl;
 //            std::cin.get();
@@ -216,27 +216,27 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if (SteamRead == true)
                         {
-                            _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                        (char*)sigScan.steam.module.PLH.module,
                                                                                                                        (char*)sigScan.steam.module.PLH.pattern,
                                                                                                                        (char*)sigScan.steam.module.PLH.mask)+0x1);
 
-                            _blockpost->baseAddress.Controll = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.Controll = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                                    (char*)sigScan.steam.module.Controll.module,
                                                                                                                                    (char*)sigScan.steam.module.Controll.pattern,
                                                                                                                                    (char*)sigScan.steam.module.Controll.mask)+0x1);
 
-                            _blockpost->baseAddress.MainManager = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.MainManager = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                                (char*)sigScan.steam.module.MainManager.module,
                                                                                                                                (char*)sigScan.steam.module.MainManager.pattern,
                                                                                                                                (char*)sigScan.steam.module.MainManager.mask)+0x1);
 
-                            _blockpost->baseAddress.VWIK = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.VWIK = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                         (char*)sigScan.steam.module.VWIK.module,
                                                                                                                         (char*)sigScan.steam.module.VWIK.pattern,
                                                                                                                         (char*)sigScan.steam.module.VWIK.mask)+0x1);
 
-                            _blockpost->baseAddress.GUIInv = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.GUIInv = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                           (char*)sigScan.steam.module.GUIInv.module,
                                                                                                                           (char*)sigScan.steam.module.GUIInv.pattern,
                                                                                                                           (char*)sigScan.steam.module.GUIInv.mask)+0x1);
@@ -289,27 +289,27 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if (LauncherRead == true)
                         {
-                            _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                        (char*)sigScan.launcher.module.PLH.module,
                                                                                                                        (char*)sigScan.launcher.module.PLH.pattern,
                                                                                                                        (char*)sigScan.launcher.module.PLH.mask)+0x1);
 
-                            _blockpost->baseAddress.Controll = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.Controll = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                                    (char*)sigScan.launcher.module.Controll.module,
                                                                                                                                    (char*)sigScan.launcher.module.Controll.pattern,
                                                                                                                                    (char*)sigScan.launcher.module.Controll.mask)+0x1);
 
-                            _blockpost->baseAddress.MainManager = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.MainManager = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                                (char*)sigScan.launcher.module.MainManager.module,
                                                                                                                                (char*)sigScan.launcher.module.MainManager.pattern,
                                                                                                                                (char*)sigScan.launcher.module.MainManager.mask)+0x1);
 
-                            _blockpost->baseAddress.VWIK = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.VWIK = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                         (char*)sigScan.launcher.module.VWIK.module,
                                                                                                                         (char*)sigScan.launcher.module.VWIK.pattern,
                                                                                                                         (char*)sigScan.launcher.module.VWIK.mask)+0x1);
 
-                            _blockpost->baseAddress.GUIInv = ProcessFunctions::ReadMemory<uintptr_t>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.GUIInv = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                           (char*)sigScan.launcher.module.GUIInv.module,
                                                                                                                           (char*)sigScan.launcher.module.GUIInv.pattern,
                                                                                                                           (char*)sigScan.launcher.module.GUIInv.mask)+0x1);
@@ -406,7 +406,7 @@ void DirectxFunctions::RenderDirectX()
 
                 }
 
-                static uintptr_t playerData = 0x0;
+                static DWORD playerData = 0x0;
                 if (threads->typeGame == 1)
                 {
 
@@ -494,7 +494,7 @@ void DirectxFunctions::RenderDirectX()
                             //VWIK__CameraAddOffset
                             if ((BYTE*)sigScan.steam.fun.CameraAddOffset.address != nullptr) mem::RetEx((BYTE*)sigScan.steam.fun.CameraAddOffset.address, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
-                            uintptr_t ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
+                            DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
                             {
                                 _blockpost->player.fly = 1;
@@ -511,7 +511,7 @@ void DirectxFunctions::RenderDirectX()
                             //VWIK__CameraAddOffset
                             if ((BYTE*)sigScan.steam.fun.CameraAddOffset.address != nullptr) mem::PatchEx((BYTE*)sigScan.steam.fun.CameraAddOffset.address, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
-                            uintptr_t ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
+                            DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
                             {
                                 _blockpost->player.fly = 0;
@@ -618,7 +618,7 @@ void DirectxFunctions::RenderDirectX()
                             //VWIK__CameraAddOffset
                             if ((BYTE*)sigScan.launcher.fun.CameraAddOffset.address != nullptr) mem::RetEx((BYTE*)sigScan.launcher.fun.CameraAddOffset.address, 1, _blockpost->pHandle); //VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
-                            uintptr_t ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
+                            DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
                             {
                                 _blockpost->player.fly = 1;
@@ -635,7 +635,7 @@ void DirectxFunctions::RenderDirectX()
                             //VWIK__CameraAddOffset
                             if ((BYTE*)sigScan.launcher.fun.CameraAddOffset.address != nullptr) mem::PatchEx((BYTE*)sigScan.launcher.fun.CameraAddOffset.address, (BYTE*)"\x55", 1, _blockpost->pHandle);//VWIK__CameraAddOffset. убирает отдачу при отцепление камеры
 
-                            uintptr_t ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
+                            DWORD ptrCameraFly = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0xE8 });
                             if ((LPCVOID)ptrCameraFly != nullptr && (LPCVOID)ptrCameraFly != (LPCVOID)0xE8)
                             {
                                 _blockpost->player.fly = 0;
@@ -659,7 +659,7 @@ void DirectxFunctions::RenderDirectX()
                 }
 
 
-                uintptr_t ptrMatrix = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0xBC });
+                DWORD ptrMatrix = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0xBC });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrMatrix), &_blockpost->matrix.viewMatrix44, 64, nullptr);
                 {
                     _blockpost->matrix.viewMatrix16[0] = _blockpost->matrix.viewMatrix44[0][0], _blockpost->matrix.viewMatrix16[4] = _blockpost->matrix.viewMatrix44[1][0], _blockpost->matrix.viewMatrix16[8] = _blockpost->matrix.viewMatrix44[2][0], _blockpost->matrix.viewMatrix16[12] = _blockpost->matrix.viewMatrix44[3][0],
@@ -668,36 +668,36 @@ void DirectxFunctions::RenderDirectX()
                     _blockpost->matrix.viewMatrix16[3] = _blockpost->matrix.viewMatrix44[0][3], _blockpost->matrix.viewMatrix16[7] = _blockpost->matrix.viewMatrix44[1][3], _blockpost->matrix.viewMatrix16[11] = _blockpost->matrix.viewMatrix44[2][3], _blockpost->matrix.viewMatrix16[15] = _blockpost->matrix.viewMatrix44[3][3];
                 }
 
-                uintptr_t ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, static_cast<unsigned int>(playerData), 0x148 });
+                DWORD ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, playerData, 0x148 });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerDeath), &_blockpost->player.death, 4, nullptr);
                 if (ptrPlayerDeath  != 0x148 &&_blockpost->player.death == 5)
                     pachFun[threads->typeGame].isUnhookCamera = true;
 
 
-                uintptr_t ptrPlayerTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, static_cast<unsigned int>(playerData), 0x14 });
+                DWORD ptrPlayerTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, playerData, 0x14 });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerTeam), &_blockpost->player.team, 4, nullptr);
 
-                uintptr_t ptrPlayerTeamZombie = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, static_cast<unsigned int>(playerData), 0x2C });
+                DWORD ptrPlayerTeamZombie = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, playerData, 0x2C });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerTeamZombie), &_blockpost->player.teamZombie, 4, nullptr);
 
                 if (threads->typeGame == 1)
                 {
-                    uintptr_t ptrGamemode= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x204 });
+                    DWORD ptrGamemode= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x204 });
                     ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrGamemode), &_blockpost->server.gamemode, 4, nullptr);
                 }
                 else if (threads->typeGame == 0)
                 {
-                    uintptr_t ptrGamemode= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x204 });
+                    DWORD ptrGamemode= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, 0x204 });
                     ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrGamemode), &_blockpost->server.gamemode, 4, nullptr);
                 }
 
 
-                uintptr_t entityDist = 0x10;
+                DWORD entityDist = 0x10;
                 for (int i = 0; i < 40; i++)
                 {
                         if (threads->section[threads->typeGame].espSetting.isActive == false)continue;
 
-                        uintptr_t ptrBaseEntity = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist) });
+                        DWORD ptrBaseEntity = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrBaseEntity), &ptrBaseEntity, 4, nullptr);
                         if (!ptrBaseEntity)
                         {
@@ -707,18 +707,18 @@ void DirectxFunctions::RenderDirectX()
                         }
 
 
-                        uintptr_t dwEntityNameDist = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x18, 0x8 });
+                        DWORD dwEntityNameDist = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x18, 0x8 });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(dwEntityNameDist), &_blockpost->entity[i].nameDist, sizeof (dwEntityNameDist), nullptr);
 
-                        uintptr_t dwEntityName = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x18, 0xC });
+                        DWORD dwEntityName = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x18, 0xC });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(dwEntityName), &_blockpost->entity[i].name, _blockpost->entity[i].nameDist*4, nullptr);
 
 
-                        uintptr_t ptrEntityVector = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x44 });
+                        DWORD ptrEntityVector = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x44 });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrEntityVector), &_blockpost->entity[i].vector, 12, nullptr);
 
 
-                        uintptr_t ptrEntityVectorHead = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x104, 0x8, 0x34, 0x60 });
+                        DWORD ptrEntityVectorHead = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x104, 0x8, 0x34, 0x60 });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrEntityVectorHead), &_blockpost->entity[i].vectorHead, 12, nullptr);
 
 
@@ -738,7 +738,7 @@ void DirectxFunctions::RenderDirectX()
                             continue;
                         }
 
-                        uintptr_t ptrEntityTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x14 });
+                        DWORD ptrEntityTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x14 });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrEntityTeam), &_blockpost->entity[i].team, 4, nullptr);
                         if ((LPCVOID)(ptrEntityTeam == 0x14) || _blockpost->entity[i].team == 2)
                         {
@@ -746,7 +746,7 @@ void DirectxFunctions::RenderDirectX()
                             continue;
                         }
 
-                        uintptr_t ptrEntityTeamZombie = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x2C });
+                        DWORD ptrEntityTeamZombie = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x2C });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrEntityTeamZombie), &_blockpost->entity[i].teamZombie, 4, nullptr);
                         if ((LPCVOID)(ptrEntityTeam == 0x2C))
                         {
@@ -755,7 +755,7 @@ void DirectxFunctions::RenderDirectX()
                         }
 
 
-                        uintptr_t ptrIsLocalPlayer = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x1F8 });
+                        DWORD ptrIsLocalPlayer = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x1F8 });
                         ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrIsLocalPlayer), &_blockpost->entity[i].isLocalPlayer, 4, nullptr);
                         if ((LPCVOID)(ptrIsLocalPlayer == 0x1F8) || _blockpost->entity[i].isLocalPlayer != NULL)
                         {
@@ -764,7 +764,7 @@ void DirectxFunctions::RenderDirectX()
                         }
 
 
-                       uintptr_t ptrEntityHealth = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x28 });
+                       DWORD ptrEntityHealth = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x28 });
                        ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrEntityHealth), &_blockpost->entity[i].health, 4, nullptr);
                        if ((LPCVOID)(ptrEntityHealth == 0x28))
                        {
@@ -773,7 +773,7 @@ void DirectxFunctions::RenderDirectX()
                        }
 
 
-                       uintptr_t pterEntityDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x148 });
+                       DWORD pterEntityDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x148 });
                        ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(pterEntityDeath), &_blockpost->entity[i].death, 4, nullptr);
                        if ((LPCVOID)(pterEntityDeath == 0x148) || _blockpost->entity[i].death == 5)
                        {
@@ -781,7 +781,7 @@ void DirectxFunctions::RenderDirectX()
                            continue;
                        }
 
-                       uintptr_t pterEntityArmor = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, static_cast<unsigned int>(entityDist), 0x198 });
+                       DWORD pterEntityArmor = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x198 });
                        ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(pterEntityArmor), &_blockpost->entity[i].armor, 4, nullptr);
                        if ((LPCVOID)(pterEntityDeath == 0x198))
                        {
@@ -789,7 +789,7 @@ void DirectxFunctions::RenderDirectX()
                            continue;
                        }
 
-//                       uintptr_t ptrGUIInv= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.GUIInv, { 0x5C, 0x5C, 0xC, 0x10 });
+//                       DWORD ptrGUIInv= ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.GUIInv, { 0x5C, 0x5C, 0xC, 0x10 });
 //                       ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrGUIInv), &_blockpost->entity[i].armor, 4, nullptr);
 //                       if ((LPCVOID)(ptrGUIInv == 0x10))
 //                       {

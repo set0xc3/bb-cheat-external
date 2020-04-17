@@ -12,7 +12,7 @@ using namespace std;
 
 namespace ToolsHack {
 
-uintptr_t GetModuleBaseAddress(TCHAR* lpszModuleName, uintptr_t pID);
+DWORD GetModuleBaseAddress(TCHAR* lpszModuleName, DWORD pID);
 uintptr_t FindDMAAddy(HANDLE hProc, uintptr_t ptr, vector<unsigned int> offsets);
 
 QString GetHWID();

@@ -12,39 +12,39 @@ class Blockpost
 public:
     Blockpost();
 
-    uintptr_t pID;
+    DWORD pID;
     HWND hGameWindow;
     HANDLE pHandle;
 
 
     struct Module
     {
-        uintptr_t SteamСlient;
-        uintptr_t UnityPlayer;
-        uintptr_t GameAssembly;
+        DWORD SteamСlient;
+        DWORD UnityPlayer;
+        DWORD GameAssembly;
     };
     Module module;
 
 
     struct Offsets
     {
-        uintptr_t PLH = 0xB1D0FC;
-        uintptr_t VWIK = 0xB1D1D0;
-        uintptr_t Controll = 0xB1D08C;
-        uintptr_t MainManager = 0xB1D16C;
+        DWORD PLH = 0xB1D0FC;
+        DWORD VWIK = 0xB1D1D0;
+        DWORD Controll = 0xB1D08C;
+        DWORD MainManager = 0xB1D16C;
         DWORD MatrixBegin = 0x1059AC0;
     };
     Offsets offsets;
 
     struct BaseAddress
     {
-        uintptr_t PLH;
-        uintptr_t VWIK;
-        uintptr_t Controll;
-        uintptr_t MainManager;
-        uintptr_t GUIInv;
-        uintptr_t MatrixBegin;
-        uintptr_t Players;
+        DWORD PLH;
+        DWORD VWIK;
+        DWORD Controll;
+        DWORD MainManager;
+        DWORD GUIInv;
+        DWORD MatrixBegin;
+        DWORD Players;
     };
     BaseAddress baseAddress;
 
