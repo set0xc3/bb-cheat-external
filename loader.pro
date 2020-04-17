@@ -41,11 +41,11 @@ DEFINES += _MBCS
 
 
 INCLUDEPATH += "C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include"
-LIBS += -L"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64"
+LIBS += -L"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86"
 
-LIBS += -L-L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\x64\Release\lib" -llibcrypto
-LIBS += -L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\x64\Release\lib" -llibssl
-INCLUDEPATH += "C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\x64\Release\include"
+LIBS += -L-L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\Win32\Release\lib" -llibcrypto
+LIBS += -L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\Win32\Release\lib" -llibssl
+INCLUDEPATH += "C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\Win32\Release\include"
 
 
 SOURCES += \

@@ -4,9 +4,9 @@
 #include "QDebug"
 
 
-BYTE* ToolsHack::GetModuleBaseAddress(TCHAR *lpszModuleName, DWORD pID)
+DWORD ToolsHack::GetModuleBaseAddress(TCHAR *lpszModuleName, DWORD pID)
 {
-        BYTE* modBaseAddr = nullptr;
+        uintptr_t modBaseAddr = 0;
         HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pID);
         if (hSnap != INVALID_HANDLE_VALUE)
         {
@@ -18,7 +18,7 @@ BYTE* ToolsHack::GetModuleBaseAddress(TCHAR *lpszModuleName, DWORD pID)
                 {
                     if (!strcmp(modEntry.szModule, lpszModuleName))
                     {
-                        modBaseAddr = modEntry.modBaseAddr;
+                        modBaseAddr = (uintptr_t)modEntry.modBaseAddr;
                         break;
                     }
                 } while (Module32Next(hSnap, &modEntry));
@@ -30,24 +30,13 @@ BYTE* ToolsHack::GetModuleBaseAddress(TCHAR *lpszModuleName, DWORD pID)
 
 uintptr_t ToolsHack::FindDMAAddy(HANDLE hProc, uintptr_t ptr, vector<unsigned int> offsets)
 {
-        uintptr_t addr = ptr;
+    uintptr_t addr = ptr;
         for (unsigned int i = 0; i < offsets.size(); ++i)
         {
             ReadProcessMemory(hProc, (BYTE*)addr, &addr, sizeof(addr), 0);
             addr += offsets[i];
         }
         return addr;
-}
-
-BYTE *ToolsHack::bFindDMAAddy(HANDLE hProc, BYTE *ptr, vector<unsigned int> offsets)
-{
-    BYTE* addr = ptr;
-    for (unsigned int i = 0; i < offsets.size(); ++i)
-    {
-        ReadProcessMemory(hProc, (BYTE*)addr, &addr, sizeof(addr), 0);
-        addr += offsets[i];
-    }
-    return addr;
 }
 
 QString ToolsHack::GetHWID()
@@ -110,5 +99,3 @@ int ToolsHack::GetAppstat(const TCHAR *Classname, const TCHAR *Appname)
     }
     return Result;
 }
-
-

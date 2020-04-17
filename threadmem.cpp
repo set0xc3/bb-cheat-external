@@ -84,8 +84,8 @@ void ThreadMem::Update()
                 }
             }
 
-//            DWORD ptrPlayerVectorHead = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0x3B4 });
-//            ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerVectorHead), &blockpost->player.vectorHead, 12, nullptr);
+            DWORD ptrPlayerVectorHead = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0x3B4 });
+            ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerVectorHead), &blockpost->player.vectorHead, 12, nullptr);
 
             //AimBot
             DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x6C });

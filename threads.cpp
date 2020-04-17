@@ -200,11 +200,7 @@ void DirectxFunctions::RenderDirectX()
                     _blockpost->module.UnityPlayer = ToolsHack::GetModuleBaseAddress((char*)"UnityPlayer.dll", _blockpost->pID);
                     _blockpost->module.SteamСlient = ToolsHack::GetModuleBaseAddress((char*)"steamclient.dll", _blockpost->pID);
 
-//                    qDebug() << (LPCVOID)_blockpost->module.GameAssembly;
-//                    qDebug() << (LPCVOID)_blockpost->module.UnityPlayer;
-//                    qDebug() << (LPCVOID)_blockpost->module.SteamСlient;
-
-//                    qDebug() << hex <<_blockpost->module.GameAssembly;
+//                    qDebug() << _blockpost->module.GameAssembly;
 
                     if (_blockpost->module.GameAssembly == 0)return;
                     if (_blockpost->module.UnityPlayer == 0)return;
@@ -220,12 +216,10 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if (SteamRead == true)
                         {
-                            _blockpost->baseAddress.bPLH = ProcessFunctions::ReadMemory<BYTE*>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
+                            _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                        (char*)sigScan.steam.module.PLH.module,
                                                                                                                        (char*)sigScan.steam.module.PLH.pattern,
                                                                                                                        (char*)sigScan.steam.module.PLH.mask)+0x1);
-
-                            qDebug() << hex << _blockpost->baseAddress.bPLH;
 
                             _blockpost->baseAddress.Controll = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                                    (char*)sigScan.steam.module.Controll.module,
@@ -665,23 +659,19 @@ void DirectxFunctions::RenderDirectX()
                 }
 
 
-//                DWORD ptrMatrix = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0xBC });
-//                ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrMatrix), &_blockpost->matrix.viewMatrix44, 64, nullptr);
-//                {
-//                    _blockpost->matrix.viewMatrix16[0] = _blockpost->matrix.viewMatrix44[0][0], _blockpost->matrix.viewMatrix16[4] = _blockpost->matrix.viewMatrix44[1][0], _blockpost->matrix.viewMatrix16[8] = _blockpost->matrix.viewMatrix44[2][0], _blockpost->matrix.viewMatrix16[12] = _blockpost->matrix.viewMatrix44[3][0],
-//                    _blockpost->matrix.viewMatrix16[1] = _blockpost->matrix.viewMatrix44[0][1], _blockpost->matrix.viewMatrix16[5] = _blockpost->matrix.viewMatrix44[1][1], _blockpost->matrix.viewMatrix16[9] = _blockpost->matrix.viewMatrix44[2][1], _blockpost->matrix.viewMatrix16[13] = _blockpost->matrix.viewMatrix44[3][1],
-//                    _blockpost->matrix.viewMatrix16[2] = _blockpost->matrix.viewMatrix44[0][2], _blockpost->matrix.viewMatrix16[6] = _blockpost->matrix.viewMatrix44[1][2], _blockpost->matrix.viewMatrix16[10] = _blockpost->matrix.viewMatrix44[2][2], _blockpost->matrix.viewMatrix16[14] = _blockpost->matrix.viewMatrix44[3][2],
-//                    _blockpost->matrix.viewMatrix16[3] = _blockpost->matrix.viewMatrix44[0][3], _blockpost->matrix.viewMatrix16[7] = _blockpost->matrix.viewMatrix44[1][3], _blockpost->matrix.viewMatrix16[11] = _blockpost->matrix.viewMatrix44[2][3], _blockpost->matrix.viewMatrix16[15] = _blockpost->matrix.viewMatrix44[3][3];
-//                }
+                DWORD ptrMatrix = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0xBC });
+                ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrMatrix), &_blockpost->matrix.viewMatrix44, 64, nullptr);
+                {
+                    _blockpost->matrix.viewMatrix16[0] = _blockpost->matrix.viewMatrix44[0][0], _blockpost->matrix.viewMatrix16[4] = _blockpost->matrix.viewMatrix44[1][0], _blockpost->matrix.viewMatrix16[8] = _blockpost->matrix.viewMatrix44[2][0], _blockpost->matrix.viewMatrix16[12] = _blockpost->matrix.viewMatrix44[3][0],
+                    _blockpost->matrix.viewMatrix16[1] = _blockpost->matrix.viewMatrix44[0][1], _blockpost->matrix.viewMatrix16[5] = _blockpost->matrix.viewMatrix44[1][1], _blockpost->matrix.viewMatrix16[9] = _blockpost->matrix.viewMatrix44[2][1], _blockpost->matrix.viewMatrix16[13] = _blockpost->matrix.viewMatrix44[3][1],
+                    _blockpost->matrix.viewMatrix16[2] = _blockpost->matrix.viewMatrix44[0][2], _blockpost->matrix.viewMatrix16[6] = _blockpost->matrix.viewMatrix44[1][2], _blockpost->matrix.viewMatrix16[10] = _blockpost->matrix.viewMatrix44[2][2], _blockpost->matrix.viewMatrix16[14] = _blockpost->matrix.viewMatrix44[3][2],
+                    _blockpost->matrix.viewMatrix16[3] = _blockpost->matrix.viewMatrix44[0][3], _blockpost->matrix.viewMatrix16[7] = _blockpost->matrix.viewMatrix44[1][3], _blockpost->matrix.viewMatrix16[11] = _blockpost->matrix.viewMatrix44[2][3], _blockpost->matrix.viewMatrix16[15] = _blockpost->matrix.viewMatrix44[3][3];
+                }
 
                 DWORD ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, playerData, 0x148 });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerDeath), &_blockpost->player.death, 4, nullptr);
                 if (ptrPlayerDeath  != 0x148 &&_blockpost->player.death == 5)
                     pachFun[threads->typeGame].isUnhookCamera = true;
-
-//                BYTE* bPlayerDeath = ToolsHack::bFindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.bPLH, { 0x5C, playerData, 0x148 });
-//                ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(bPlayerDeath), &_blockpost->player.death, 4, nullptr);
-//                qDebug() << _blockpost->player.death;
 
 
                 DWORD ptrPlayerTeam = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, playerData, 0x14 });
