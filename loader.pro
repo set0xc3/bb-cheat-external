@@ -21,6 +21,25 @@ DEFINES += _MBCS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+##ifdef Q_OS_WIN32
+#INCLUDEPATH += "C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include"
+#LIBS += -L"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86"
+
+#LIBS += -L-L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\Win32\Release\lib" -llibcrypto
+#LIBS += -L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\Win32\Release\lib" -llibssl
+#INCLUDEPATH += "C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\Win32\Release\include"
+##endif
+
+##ifdef Q_OS_WIN64
+#INCLUDEPATH += "C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include"
+#LIBS += -L"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64"
+
+#LIBS += -L-L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\x64\Release\lib" -llibcrypto
+#LIBS += -L"C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\x64\Release\lib" -llibssl
+#INCLUDEPATH += "C:\Users\admin\Desktop\OpenSSL-1.1.1-pre10-dev-vs2017\static\x64\Release\include"
+##endif
+
+
 INCLUDEPATH += "C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include"
 LIBS += -L"C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86"
 

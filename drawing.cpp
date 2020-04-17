@@ -83,7 +83,8 @@ void Drawing::String(int x, int y, char *string, D3DCOLOR color)
     char buffer[1024] = { NULL };
 
     va_list args;
-    __crt_va_start_a(args, string);
+//    __crt_va_start_a(args, string);
+
     wvsprintf(buffer, string, args);
     va_end(args);
 
@@ -105,7 +106,7 @@ void Drawing::StringW(int x, int y, WCHAR * string, D3DCOLOR color)
     WCHAR buffer[1024] = { NULL };
 
     va_list args;
-    __crt_va_start_a(args, string);
+//    __crt_va_start_a(args, string);
     wvsprintfW(buffer, string, args);
     __crt_va_end(args);
 

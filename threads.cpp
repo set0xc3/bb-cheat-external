@@ -154,11 +154,11 @@ void DirectxFunctions::RenderDirectX()
 //        std::cin.get();
     }
 
+
     if (isBlockpost  == false)
     {
         DirectX.Device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00000000, 1.0f, 0);
         DirectX.Device->BeginScene();
-
 
         if (threads->isActive == true)
         {
@@ -200,6 +200,7 @@ void DirectxFunctions::RenderDirectX()
                     _blockpost->module.UnityPlayer = ToolsHack::GetModuleBaseAddress((char*)"UnityPlayer.dll", _blockpost->pID);
                     _blockpost->module.SteamСlient = ToolsHack::GetModuleBaseAddress((char*)"steamclient.dll", _blockpost->pID);
 
+//                    qDebug() << _blockpost->module.GameAssembly;
 
                     if (_blockpost->module.GameAssembly == 0)return;
                     if (_blockpost->module.UnityPlayer == 0)return;

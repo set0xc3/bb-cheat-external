@@ -1,26 +1,31 @@
 #include "toolshack.h"
+#include <Windows.h>
+#include <TlHelp32.h>
+#include "QDebug"
 
 
 DWORD ToolsHack::GetModuleBaseAddress(TCHAR *lpszModuleName, DWORD pID)
 {
-    DWORD dwModuleBaseAddress = 0;
-    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
-    MODULEENTRY32 ModuleEntry32 = { 0 };
-    ModuleEntry32.dwSize = sizeof(MODULEENTRY32);
-
-    if (Module32First(hSnapshot, &ModuleEntry32))
-    {
-        do {
-            if (strcmp(ModuleEntry32.szModule, lpszModuleName) == 0)
+        uintptr_t modBaseAddr = 0;
+        HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pID);
+        if (hSnap != INVALID_HANDLE_VALUE)
+        {
+            MODULEENTRY32 modEntry;
+            modEntry.dwSize = sizeof(modEntry);
+            if (Module32First(hSnap, &modEntry))
             {
-                dwModuleBaseAddress = (DWORD)ModuleEntry32.modBaseAddr;
-                break;
+                do
+                {
+                    if (!strcmp(modEntry.szModule, lpszModuleName))
+                    {
+                        modBaseAddr = (uintptr_t)modEntry.modBaseAddr;
+                        break;
+                    }
+                } while (Module32Next(hSnap, &modEntry));
             }
-        } while (Module32Next(hSnapshot, &ModuleEntry32));
-
-    }
-    CloseHandle(hSnapshot);
-    return dwModuleBaseAddress;
+        }
+        CloseHandle(hSnap);
+        return modBaseAddr;
 }
 
 uintptr_t ToolsHack::FindDMAAddy(HANDLE hProc, uintptr_t ptr, vector<unsigned int> offsets)

@@ -1,5 +1,6 @@
 #include "functions.h"
 #include <TlHelp32.h>
+#include <QDebug>
 
 
 void ProcessFunctions::CheckDWM()
