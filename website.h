@@ -31,7 +31,7 @@ signals:
     void loadSettingSignal();
 
 public:
-    QString _version = "v10.30";
+    QString _version = "";
     QString version = "";
     QString buffupdatelog = "";
     QString updatelog = "";
@@ -48,7 +48,7 @@ public:
         QString name;
         QByteArray password;
         QByteArray version;
-        QByteArray versionBuff = "4rs9gM2ARr+C6rhAyxHOytr80puCJdxO7ERjdCD++1byR0xbeq2UxS4qIXFvbD1UV1fs43u1lztlhU8cvTbnCJO0LMM7A8ieIoaKmgq1+A8MG5P90akPdeXxxQ1v86nVcyrvm7H2Nw24Sa3ne4mfAzEvTCdrt0TLGXAA+85uqR1PNN4dggXDtNyA4LkSN7NKUnnlM7lV9xxU0Jd3pAsG4OU7ZbV+1scDO0PJKp1UgsWAGXtfzTCsKcpTrcuIZF18gI3bNLfTTqazIhYLkSG4tV6zxKX4D2S2KqWwsI/E/kb22MhcSARwpnXBNyOJYkRq5hmbZozUPmlOY8QR7UodLw==";
+        QByteArray versionBuff = "RNBI48mw93rbf2Rb8vEHrKI+Tquw+UPbOhHK3wSFITUNgvOgxSlyg2mJze0KG1A9yKtm//GLCQfFES0jiePD1tDJ2SDcSCNJMByLFZ6/or0Jl8xOUR4ws/gFWU7BV87r1wRiteOfKrnQPY2oG57tXJ3V4T+aeC4teCJMAcySjzC9+IIg+/vFHwvdC5aG0ESTrn7desu+BzmJfORUM/APN990q91EOtt6bJ0nHzhvFDZnmNbzBGr9or7B6FsKW5JqHhxKyITFFwNQtqC0zuyhp4eLyVJgoVAOOc0z+TkWfLXczbotK9YKvE5cmN6Psw+daKnfQjWTBcLlJTvPUf77IA==";
 
         QByteArray servercommBuff = "a/The3CW+rTkyNrMzDTtz+I/NTryxd2r/bweQTxjQaf5H9OKi0hl3Uvm/yMeDAx7STFzfqWKO0wLTAzzJriKhUcTFGZMIND6VxF5Y0BrVbk4mXdihBez7F0z/7ET0VsamHCChriuqz2Wul06Tr3pQuA4bz77MQ3vW4+9/qhcRXJKXLRX5mIxWfv2xLmuyGiiW1E/Bj+McmspcmQvaGHc9hJX++ozeugbKPP2K6ZvA0mg4KjjEOslk2GE/wXTu47fryCpHtFr6fIzMyfJhuJY5fP7hTir5RmJPNJfv52mdRudb98Xssw/LsAw0kl/eTghU5ortpgk2AL7K117Av5PLw==";
         QByteArray servercomm;
