@@ -70,10 +70,10 @@ public:
             bool isRadius = false;
 
             int aim = 0;
-            UINT keybind = 0x00;
+            int keybind = 0;
             QString keybindText = "Key Bind";
             int smoothness = 0;
-            int radius = 5;
+            int radius = 1;
             int bone = 0;
 
             QColor colorRadius = *new QColor(255, 255, 255);
@@ -114,7 +114,7 @@ public:
             bool isUnhookCamera = false;
             bool isFreezing = false;
 
-            UINT keybind = 0x00;
+            int keybind = 0;
             QString keybindText = "Key Bind";
         };
         MiscSetting miscSetting;

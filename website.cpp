@@ -58,8 +58,8 @@ void website::loadSetting(QJsonObject root)
     {
         int i = this->userData.typeGame;
         this->threads->section[i].aimSetting.isActive = root["aim_isactive"].toString().toInt();
-        this->threads->section[i].aimSetting.keybind = root["aim_keybind"].toString().toUInt();
-        this->threads->section[i].aimSetting.keybindText = root["aim_keybindText"].toString();
+        this->threads->section[i].aimSetting.keybind = root["aim_keybind"].toString().toInt();
+        this->threads->section[i].aimSetting.keybindText = root["aim_keybindtext"].toString();
         this->threads->section[i].aimSetting.isRadius = root["aim_isradius"].toString().toInt();
         this->threads->section[i].aimSetting.bone = root["aim_bone"].toString().toInt();
         this->threads->section[i].aimSetting.smoothness = root["aim_smooth"].toString().toInt();
@@ -84,8 +84,8 @@ void website::loadSetting(QJsonObject root)
 
         this->threads->section[i].miscSetting.isUnhookCamera = root["misc_isunhookcamera"].toString().toInt();
         this->threads->section[i].miscSetting.isFreezing = root["misc_isfreeze"].toString().toInt();
-        this->threads->section[i].miscSetting.keybind = root["misc_keybind"].toString().toUInt();
-        this->threads->section[i].miscSetting.keybindText = root["misc_keybindText"].toString();
+        this->threads->section[i].miscSetting.keybind = root["misc_keybind"].toString().toInt();
+        this->threads->section[i].miscSetting.keybindText = root["misc_keybindtext"].toString();
 
         emit loadSettingSignal();
     }
@@ -305,7 +305,7 @@ void website::save(QString typegame)
     data.append("&typegame="+typegame);
 
     data.append("&aim_keybind="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.keybind));
-    data.append("&aim_keybindText="+this->threads->section[this->authForm->loadSetting].aimSetting.keybindText);
+    data.append("&aim_keybindtext="+this->threads->section[this->authForm->loadSetting].aimSetting.keybindText);
     data.append("&aim_bone="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.bone));
     data.append("&aim_color="+this->threads->section[this->authForm->loadSetting].aimSetting.colorRadius.name());
     data.append("&aim_isactive="+QString::number(this->threads->section[this->authForm->loadSetting].aimSetting.isActive));
@@ -324,8 +324,9 @@ void website::save(QString typegame)
 
     data.append("&misc_isfreeze="+QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isFreezing));
     data.append("&misc_isunhookcamera="+QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.isUnhookCamera));
+
     data.append("&misc_keybind="+QString::number(this->threads->section[this->authForm->loadSetting].miscSetting.keybind));
-    data.append("&misc_keybindText="+this->threads->section[this->authForm->loadSetting].miscSetting.keybindText);
+    data.append("&misc_keybindtext="+this->threads->section[this->authForm->loadSetting].miscSetting.keybindText);
 
     data.append("&weapon_isactive="+QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isActive));
     data.append("&weapon_isautomatic="+QString::number(this->threads->section[this->authForm->loadSetting].weaponSetting.isAutomaticWeapon));
