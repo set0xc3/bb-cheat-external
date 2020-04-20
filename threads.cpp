@@ -658,6 +658,12 @@ void DirectxFunctions::RenderDirectX()
 
                 }
 
+                static bool isUnhook = false;
+                if (GetAsyncKeyState(threads->section[threads->typeGame].miscSetting.keybind) & 1)
+                {
+                    isUnhook = !threads->section[threads->typeGame].miscSetting.isUnhookCamera;
+                    threads->section[threads->typeGame].miscSetting.isUnhookCamera = isUnhook;
+                }
 
                 DWORD ptrMatrix = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0xBC });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrMatrix), &_blockpost->matrix.viewMatrix44, 64, nullptr);

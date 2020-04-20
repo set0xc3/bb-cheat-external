@@ -70,7 +70,7 @@ void ThreadMem::Update()
             if (Target.Window != nullptr && ToolsHack::GetAppstat(nullptr, "BLOCKPOST") == 1)
             {
 
-            if (blockpost->aimBot.target != -1 && blockpost->entity[blockpost->aimBot.target].team != 2 && blockpost->entity[blockpost->aimBot.target].death != 5 && GetAsyncKeyState(VK_RBUTTON) && 1)blockpost->aimBot.isActive = false;
+            if (blockpost->aimBot.target != -1 && blockpost->entity[blockpost->aimBot.target].team != 2 && blockpost->entity[blockpost->aimBot.target].death != 5 && GetAsyncKeyState((UINT)threads->section[threads->typeGame].aimSetting.keybind) && 1)blockpost->aimBot.isActive = false;
             else blockpost->aimBot.isActive = true;
 
 

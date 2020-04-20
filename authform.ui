@@ -1374,7 +1374,7 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QPushButton" name="armorSwitch">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -2073,7 +2073,7 @@ QPushButton:hover {
       </property>
       <property name="geometry">
        <rect>
-        <x>-100</x>
+        <x>100</x>
         <y>20</y>
         <width>61</width>
         <height>22</height>
@@ -2086,6 +2086,7 @@ QPushButton:hover {
        <string>Key Bind</string>
       </property>
      </widget>
+     <zorder>aimBotKeyButton</zorder>
      <zorder>label_16</zorder>
      <zorder>label_19</zorder>
      <zorder>smoothnessSlider</zorder>
@@ -2102,7 +2103,6 @@ QPushButton:hover {
      <zorder>boneBox</zorder>
      <zorder>smoothnessLabel</zorder>
      <zorder>radiusLabel</zorder>
-     <zorder>aimBotKeyButton</zorder>
     </widget>
     <widget class="QWidget" name="Weapon_Widget" native="true">
      <property name="enabled">
@@ -2569,6 +2569,31 @@ QPushButton:hover {
        <string>Убрать заморозку при спавне</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="miscKeyButton">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>20</y>
+        <width>61</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(68, 71, 76);</string>
+      </property>
+      <property name="text">
+       <string>Key Bind</string>
+      </property>
+     </widget>
+     <zorder>miscKeyButton</zorder>
+     <zorder>label_35</zorder>
+     <zorder>unhookCameraSwitch</zorder>
+     <zorder>label_38</zorder>
+     <zorder>freezeSwitch</zorder>
+     <zorder>label_36</zorder>
     </widget>
     <widget class="QWidget" name="Setting_Widget" native="true">
      <property name="geometry">
@@ -3027,6 +3052,9 @@ color: rgb(201, 214, 237)</string>
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
+     <zorder>label_17</zorder>
+     <zorder>label_31</zorder>
+     <zorder>label_18</zorder>
     </widget>
     <zorder>widget</zorder>
     <zorder>widget_2</zorder>
@@ -3049,12 +3077,12 @@ color: rgb(201, 214, 237)</string>
     <zorder>miscButton</zorder>
     <zorder>aimButton</zorder>
     <zorder>startButton</zorder>
-    <zorder>Misc_Widget</zorder>
     <zorder>ESP_Widget</zorder>
+    <zorder>Misc_Widget</zorder>
+    <zorder>Aim_Widget</zorder>
     <zorder>Setting_Widget</zorder>
     <zorder>Weapon_Widget</zorder>
     <zorder>Waiting_Widget</zorder>
-    <zorder>Aim_Widget</zorder>
    </widget>
    <zorder>mainWidget</zorder>
    <zorder>authWidget</zorder>

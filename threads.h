@@ -70,7 +70,8 @@ public:
             bool isRadius = false;
 
             int aim = 0;
-            QString keybind = "";
+            UINT keybind = 0x00;
+            QString keybindText = "Key Bind";
             int smoothness = 0;
             int radius = 5;
             int bone = 0;
@@ -104,7 +105,7 @@ public:
 
             int rangeShovels = 3;
 
-            BYTE* wrangeShovels;
+            BYTE* wrangeShovels = (BYTE*)"\xC7\x04\x24\x00\x00\x40\x40";
         };
         WeaponSetting weaponSetting;
 
@@ -112,6 +113,9 @@ public:
         {
             bool isUnhookCamera = false;
             bool isFreezing = false;
+
+            UINT keybind = 0x00;
+            QString keybindText = "Key Bind";
         };
         MiscSetting miscSetting;
 
