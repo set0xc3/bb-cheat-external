@@ -1025,7 +1025,7 @@ void DirectxFunctions::ThreadProc()
                 }
 
 
-                Threads::msleep(1);
+                Threads::msleep(5);
     }
 }
 

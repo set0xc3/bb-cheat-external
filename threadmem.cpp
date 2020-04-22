@@ -88,9 +88,8 @@ void ThreadMem::Update()
             ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerVectorHead), &blockpost->player.vectorHead, 12, nullptr);
 
             //AimBot
-            DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x6C });
+            DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x3C });
             ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerAngle), &blockpost->player.angle, 8, nullptr);
-
 
             DWORD entityDist = 0x10;
             for (int i = 0; i < 40; i++)
@@ -111,6 +110,8 @@ void ThreadMem::Update()
                         continue;
                     }
                 }
+
+
 
 
                 if (blockpost->entity[i].team == 2)
@@ -134,8 +135,10 @@ void ThreadMem::Update()
                 DWORD ptrEntityVectorHeadT = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x104, 0x8, 0x34, 0x60 });
                 ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrEntityVectorHeadT), &blockpost->entity[i].vectorHeadT, 12, nullptr);
 
+
                 DWORD ptrEntityVectorBodyT = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x100, 0x8, 0x34, 0x60 });
                 ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrEntityVectorBodyT), &blockpost->entity[i].vectorBodyT, 12, nullptr);
+
 
                 DWORD ptrEntityVectorLArm = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.PLH, { 0x5C, 0xC, entityDist, 0x108, 0x10, 0x8, 0x34, 0x60 });
                 ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrEntityVectorLArm), &blockpost->entity[i].vectorLArm[0], 12, nullptr);
@@ -336,6 +339,7 @@ void ThreadMem::Update()
                             }
                         }
 
+
                         blockpost->player.angle += MathsFunctions::Clamp(MathsFunctions::Norm(MathsFunctions::AimbotSmooth(blockpost->entity[blockpost->aimBot.target].angle[blockpost->aimBot.boneId], blockpost->player.angle)))
                                 / ((threads->section[threads->typeGame].aimSetting.smoothness / 3) + 1.0f);
 
@@ -348,7 +352,7 @@ void ThreadMem::Update()
         }
 
 
-        ThreadMem::msleep(1);
+        ThreadMem::msleep(5);
     }
 
 }
