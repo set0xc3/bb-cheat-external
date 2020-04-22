@@ -289,6 +289,7 @@ void DirectxFunctions::RenderDirectX()
                     {
                         if (LauncherRead == true)
                         {
+
                             _blockpost->baseAddress.PLH = ProcessFunctions::ReadMemory<DWORD>(Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                                                                        (char*)sigScan.launcher.module.PLH.module,
                                                                                                                        (char*)sigScan.launcher.module.PLH.pattern,
@@ -318,6 +319,7 @@ void DirectxFunctions::RenderDirectX()
 
 
                             {
+
                                 sigScan.launcher.fun.SetFreeze.address = Scanner::ExternalAoBScan(pHandle, _blockpost->pID,
                                                                          (char*)sigScan.launcher.fun.SetFreeze.module,
                                                                          (char*)sigScan.launcher.fun.SetFreeze.pattern,
@@ -354,6 +356,21 @@ void DirectxFunctions::RenderDirectX()
                                                                          (char*)sigScan.launcher.ins.AutomaticWeapon.pattern,
                                                                          (char*)sigScan.launcher.ins.AutomaticWeapon.mask);
                              LauncherRead = false;
+
+//                             qDebug() << "PLH:" << hex << _blockpost->baseAddress.PLH;
+//                             qDebug() << "Controll:" << hex << _blockpost->baseAddress.Controll;
+//                             qDebug() << "MainManager:" << hex << _blockpost->baseAddress.MainManager;
+//                             qDebug() << "VWIK:" << hex <<_blockpost->baseAddress.VWIK;
+//                             qDebug() << "GUIInv:" << hex <<_blockpost->baseAddress.GUIInv << "\n";
+
+//                             qDebug() << "SetFreeze:" << hex <<sigScan.launcher.fun.SetFreeze.address;
+//                             qDebug() << "SendAttack:" << hex <<sigScan.launcher.fun.SendAttack.address;
+//                             qDebug() << "CameraAddAngle:" << hex <<sigScan.launcher.fun.CameraAddAngle.address;
+//                             qDebug() << "CameraAddOffset:" << hex <<sigScan.launcher.fun.CameraAddOffset.address << "\n";
+
+//                             qDebug() << "InfiniteAmmo:" << hex <<sigScan.launcher.ins.InfiniteAmmo.address;
+//                             qDebug() << "RangeShovels:" << hex <<sigScan.launcher.ins.RangeShovels.address;
+//                             qDebug() << "AutomaticWeapon:" << hex <<sigScan.launcher.ins.AutomaticWeapon.address;
                             }
                         }
 
