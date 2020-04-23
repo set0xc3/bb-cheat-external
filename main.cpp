@@ -71,6 +71,13 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    HANDLE hMutex = OpenMutex(MUTEX_ALL_ACCESS, 0, "CHEATBP");
+     if(!hMutex)  // Если hMutex = 0, то мьютекс не существует.
+       hMutex = CreateMutex(0, 0, "CHEATBP");
+     else
+     {
+         exit(1);
+     }
 
 //    testRSA();
 //    testAES();

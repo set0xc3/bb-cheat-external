@@ -87,8 +87,13 @@ void ThreadMem::Update()
             DWORD ptrPlayerVectorHead = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.MatrixBegin, { 0x0, 0x8, 0x3B4 });
             ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerVectorHead), &blockpost->player.vectorHead, 12, nullptr);
 
+
+            static DWORD offsetAimBot = 0x0;
+            if (threads->typeGame == 1)offsetAimBot = 0x6C; //Если это Steam
+            else offsetAimBot = 0x3C; //Если это Launcher
+
             //AimBot
-            DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, 0x3C });
+            DWORD ptrPlayerAngle = ToolsHack::FindDMAAddy(blockpost->pHandle, blockpost->baseAddress.Controll, { 0x5C, offsetAimBot });
             ReadProcessMemory(blockpost->pHandle, (LPCVOID)(ptrPlayerAngle), &blockpost->player.angle, 8, nullptr);
 
             DWORD entityDist = 0x10;

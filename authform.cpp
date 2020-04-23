@@ -339,8 +339,13 @@ void AuthForm::on_loginButton_clicked()
 
 void AuthForm::loaderFormSlot()
 {
+    web->heartbeat();
+
     ui->authWidget->setVisible(false);
     this->currentForm = true;
+
+    // Показываем пользователю количество online
+    ui->online->setText("Online: "+web->userData.online);
 
     // Показываем пользователю количество дней и имя
     ui->nameLabel->setText(web->userData.name);

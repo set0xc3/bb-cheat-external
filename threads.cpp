@@ -876,6 +876,7 @@ void DirectxFunctions::RenderDirectX()
             }
         }
 
+
 //        if (_blockpost->aimBot.fov[_blockpost->aimBot.boneId] < threads->section[threads->typeGame].aimSetting.radius || _blockpost->aimBot.fov[_blockpost->aimBot.boneId] < -threads->section[threads->typeGame].aimSetting.radius) Drawing::Line(Overlay.Width / 2, Overlay.Height / 2, _blockpost->entity[_blockpost->aimBot.target].screenHead.x, _blockpost->entity[_blockpost->aimBot.target].screenHead.y, Color::White);
 
 //        Drawing::Line(Overlay.Width / 2,  Overlay.Height / Overlay.Width, 0, 0, Color::Yellow);
@@ -901,6 +902,7 @@ void DirectxFunctions::RenderDirectX()
             threads->m_fps = fps;
             fps = 0;
         }
+
 
         DirectX.Device->EndScene();
         DirectX.Device->PresentEx(0, 0, 0, 0, 0);

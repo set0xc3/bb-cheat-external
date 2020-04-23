@@ -156,6 +156,15 @@ void website::readyRead()
                 this->userData.name = b_data;
             }
 
+            //-- Online
+            {
+                QJsonValue authorized = root["online"];
+                QString s_data = authorized.toString();
+                QByteArray b_data; b_data = s_data.toUtf8(); // QString to QByteArray
+
+                this->userData.online = b_data;
+            }
+
             //-- servercomm
             {
                 QJsonValue authorized = root["servercomm"];
@@ -285,6 +294,15 @@ void website::auth(QString login, QString pass)
 
     this->post("https://shredhack.ru/api/api.php", data);
     this->getHTML("https://shredhack.ru/update-log.php/");
+}
+
+void website::heartbeat()
+{
+    QByteArray data;
+    data.append("heartbeat=1");
+    data.append("&login="+this->userData.name);
+
+    this->post("https://shredhack.ru/api/api.php", data);
 }
 
 void website::load(QString typegame)
