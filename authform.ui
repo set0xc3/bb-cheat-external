@@ -2663,7 +2663,7 @@ QPushButton:hover {
       </property>
       <property name="icon">
        <iconset resource="main.qrc">
-        <normaloff>:/resource/images/switch_active.png</normaloff>:/resource/images/switch_active.png</iconset>
+        <normaloff>:/resource/images/switch_noactive.png</normaloff>:/resource/images/switch_noactive.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -2939,6 +2939,61 @@ QPushButton:hover {
        </size>
       </property>
      </widget>
+     <widget class="QLabel" name="label_39">
+      <property name="geometry">
+       <rect>
+        <x>45</x>
+        <y>260</y>
+        <width>161</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Уменьшить потребление CPU</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="cpuSwitch">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>260</y>
+        <width>31</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Franklin Gothic 7</family>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="main.qrc">
+        <normaloff>:/resource/images/switch_active.png</normaloff>:/resource/images/switch_active.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>30</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
      <zorder>steamButtonSetting</zorder>
      <zorder>launcher_icon_3</zorder>
      <zorder>label_40</zorder>
@@ -2952,6 +3007,8 @@ QPushButton:hover {
      <zorder>saveButtonSetting2</zorder>
      <zorder>loadButtonSetting2</zorder>
      <zorder>clearButtonSetting2</zorder>
+     <zorder>label_39</zorder>
+     <zorder>cpuSwitch</zorder>
     </widget>
     <widget class="QWidget" name="Waiting_Widget" native="true">
      <property name="geometry">
@@ -3102,11 +3159,11 @@ color: rgb(201, 214, 237)</string>
     <zorder>aimButton</zorder>
     <zorder>startButton</zorder>
     <zorder>online</zorder>
-    <zorder>Misc_Widget</zorder>
-    <zorder>Weapon_Widget</zorder>
     <zorder>Setting_Widget</zorder>
-    <zorder>ESP_Widget</zorder>
     <zorder>Aim_Widget</zorder>
+    <zorder>ESP_Widget</zorder>
+    <zorder>Weapon_Widget</zorder>
+    <zorder>Misc_Widget</zorder>
     <zorder>Waiting_Widget</zorder>
    </widget>
    <zorder>mainWidget</zorder>

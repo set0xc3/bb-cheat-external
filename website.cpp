@@ -236,13 +236,15 @@ void website::readyReadHTML()
         QString html = QString::fromUtf8(bytes);
 
         if(buff == true && html != ""){
-            this->buffupdatelog = html;
+            this->updatelog = html;
             buff = false;
         }
 
-        if(this->updatelog != html)this->updatelog = html;
-
-        html = "";
+        if(this->updatelog != html)
+        {
+            this->updatelog = html;
+            this->newlog = true;
+        }
    }
    else
    {

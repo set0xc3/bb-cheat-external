@@ -38,6 +38,7 @@ public:
     QString name = "";
     QString day = "";
     bool authorized = false;
+    bool newlog = false;
 
 
     struct UserData
@@ -49,7 +50,7 @@ public:
         QString name;
         QByteArray password;
         QByteArray version;
-        QByteArray versionBuff = "CoAhpdkfiDYGGvHzdkqQdxtVhbUvg8/Uv0A839MrBoZTg3a6W7oa7Eln8GbNo8eoU7JhapgkeS/Gx8qgpIvjU3PoM2Y05FCOcDhu3j1VmcuWhz53Z28bgvuN3e0UalBBrizKfLSGhREm3oR5UNIHwoVW6zxFnDO8DGcajqlOUoPlkFVAk10p6B3vi/nEI9K/HsP6WrotHxIJszXKvJKILLG+X7OHxEh7gXB9ipel/rNeCK0rXZe1b83596i3+dF1gJHvCte+nZD+OtLz4BZ3CeGH19k1+6VV1vLn8lz0728YATz23RwHztgIU1CNjzO/iOrVrIzvu4NMRdNRwWRLSQ==";
+        QByteArray versionBuff = "lgRrU9GfTtsc4Bjr8lLsBzZUefnG/AS66OuYiER3pXDPe8i6cX4/7mRC79Kbyq1gW0ahZmjeHn6DHVCon9nqwgdHCaUpm0McLQytFoCsRgi2SMry7Q3PZqXMXDE9k7lYk2OwMftcprvI07cq+ApuV79gI2pCLU1kaJaUyn4Srp7c0CdNOZUptz7e/e05OoFkRrgsX8/+PJlO1DADJxuRJaHBQ4+E5zPb9OvpoviF2gNxjCigicfYE0W1hCQet9UJf45ZSbM9DtiRF6UllsXMLAZbpI7wgrnav0T4Hx7V1JMQyBDQWrcCkgUQfIQvt4mhwXkutb4VVwdKD90xGIQ0yA==";
 
         QByteArray servercommBuff = "a/The3CW+rTkyNrMzDTtz+I/NTryxd2r/bweQTxjQaf5H9OKi0hl3Uvm/yMeDAx7STFzfqWKO0wLTAzzJriKhUcTFGZMIND6VxF5Y0BrVbk4mXdihBez7F0z/7ET0VsamHCChriuqz2Wul06Tr3pQuA4bz77MQ3vW4+9/qhcRXJKXLRX5mIxWfv2xLmuyGiiW1E/Bj+McmspcmQvaGHc9hJX++ozeugbKPP2K6ZvA0mg4KjjEOslk2GE/wXTu47fryCpHtFr6fIzMyfJhuJY5fP7hTir5RmJPNJfv52mdRudb98Xssw/LsAw0kl/eTghU5ortpgk2AL7K117Av5PLw==";
         QByteArray servercomm;

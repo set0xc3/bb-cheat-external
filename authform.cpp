@@ -344,6 +344,19 @@ void AuthForm::loaderFormSlot()
     ui->authWidget->setVisible(false);
     this->currentForm = true;
 
+    static bool setLog = true;
+    if (setLog == true)
+    {
+        ui->updatelogText->setHtml(web->updatelog);
+        setLog = false;
+    }
+
+    if (web->newlog == true)
+    {
+        ui->updatelogText->setHtml(web->updatelog);
+        web->newlog = false;
+    }
+
     // Показываем пользователю количество online
     ui->online->setText("Online: "+web->userData.online);
 
@@ -387,18 +400,6 @@ void AuthForm::loaderFormSlot()
     {
         ui->infiniteAmmoSwitch->setEnabled(true);
         ui->label_30->setEnabled(true);
-    }
-
-    if(web->buffupdatelog != web->updatelog){
-        ui->updatelogText->setHtml(web->updatelog);
-        web->buffupdatelog = web->updatelog;
-    }
-
-    if(ui->updatelogText->toMarkdown() == "")ui->updatelogText->setHtml(web->updatelog);
-    if(web->buffupdatelog != web->updatelog)
-    {
-        ui->updatelogText->setHtml(web->updatelog);
-        web->buffupdatelog = web->updatelog;
     }
 
 }
@@ -1238,3 +1239,14 @@ void AuthForm::on_rangeShovelsSlider_actionTriggered(int action)
 
 
 
+
+void AuthForm::on_cpuSwitch_clicked()
+{
+    static bool check = false;
+    check = !threads->settingSetting.isCPU;
+
+    if (check == true)ui->cpuSwitch->setIcon(QIcon(":/resource/images/switch_active.png"));
+    else ui->cpuSwitch->setIcon(QIcon(":/resource/images/switch_noactive.png"));
+
+    threads->settingSetting.isCPU = check;
+}

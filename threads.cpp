@@ -357,20 +357,7 @@ void DirectxFunctions::RenderDirectX()
                                                                          (char*)sigScan.launcher.ins.AutomaticWeapon.mask);
                              LauncherRead = false;
 
-//                             qDebug() << "PLH:" << hex << _blockpost->baseAddress.PLH;
-//                             qDebug() << "Controll:" << hex << _blockpost->baseAddress.Controll;
-//                             qDebug() << "MainManager:" << hex << _blockpost->baseAddress.MainManager;
-//                             qDebug() << "VWIK:" << hex <<_blockpost->baseAddress.VWIK;
-//                             qDebug() << "GUIInv:" << hex <<_blockpost->baseAddress.GUIInv << "\n";
 
-//                             qDebug() << "SetFreeze:" << hex <<sigScan.launcher.fun.SetFreeze.address;
-//                             qDebug() << "SendAttack:" << hex <<sigScan.launcher.fun.SendAttack.address;
-//                             qDebug() << "CameraAddAngle:" << hex <<sigScan.launcher.fun.CameraAddAngle.address;
-//                             qDebug() << "CameraAddOffset:" << hex <<sigScan.launcher.fun.CameraAddOffset.address << "\n";
-
-//                             qDebug() << "InfiniteAmmo:" << hex <<sigScan.launcher.ins.InfiniteAmmo.address;
-//                             qDebug() << "RangeShovels:" << hex <<sigScan.launcher.ins.RangeShovels.address;
-//                             qDebug() << "AutomaticWeapon:" << hex <<sigScan.launcher.ins.AutomaticWeapon.address;
                             }
                         }
 
@@ -691,7 +678,7 @@ void DirectxFunctions::RenderDirectX()
                     _blockpost->matrix.viewMatrix16[3] = _blockpost->matrix.viewMatrix44[0][3], _blockpost->matrix.viewMatrix16[7] = _blockpost->matrix.viewMatrix44[1][3], _blockpost->matrix.viewMatrix16[11] = _blockpost->matrix.viewMatrix44[2][3], _blockpost->matrix.viewMatrix16[15] = _blockpost->matrix.viewMatrix44[3][3];
                 }
 
-                DWORD ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.PLH, { 0x5C, playerData, 0x148 });
+                DWORD ptrPlayerDeath = ToolsHack::FindDMAAddy(_blockpost->pHandle, _blockpost->baseAddress.Controll, { 0x5C, playerData, 0x148 });
                 ReadProcessMemory(_blockpost->pHandle, (LPCVOID)(ptrPlayerDeath), &_blockpost->player.death, 4, nullptr);
                 if (ptrPlayerDeath  != 0x148 &&_blockpost->player.death == 5)
                     pachFun[threads->typeGame].isUnhookCamera = true;
@@ -1027,7 +1014,8 @@ void DirectxFunctions::ThreadProc()
                 }
 
 
-                Threads::msleep(5);
+                if (threads->settingSetting.isCPU == true) Threads::msleep(5);
+                else Threads::msleep(1);
     }
 }
 

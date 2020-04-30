@@ -234,6 +234,8 @@ private slots:
 
     void on_miscKeyButton_clicked();
 
+    void on_cpuSwitch_clicked();
+
 private:
     Ui::AuthForm *ui;
 

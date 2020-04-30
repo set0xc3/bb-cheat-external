@@ -65,6 +65,7 @@ SOURCES += \
     website.cpp
 
 HEADERS += \
+    Reclass.h \
     aestest.h \
     authform.h \
     blockpost.h \

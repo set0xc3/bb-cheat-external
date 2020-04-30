@@ -59,6 +59,7 @@ public:
     {
         int VerticalSync = 0;
         bool isVerticalSync = false;
+        bool isCPU = true;
     };
     SettingSetting settingSetting;
 

@@ -89,7 +89,7 @@ void ThreadMem::Update()
 
 
             static DWORD offsetAimBot = 0x0;
-            if (threads->typeGame == 1)offsetAimBot = 0x6C; //Если это Steam
+            if (threads->typeGame == 1)offsetAimBot = 0x3C; //Если это Steam
             else offsetAimBot = 0x3C; //Если это Launcher
 
             //AimBot
@@ -357,7 +357,10 @@ void ThreadMem::Update()
         }
 
 
-        ThreadMem::msleep(5);
+
+        if (threads->settingSetting.isCPU == true) ThreadMem::msleep(5);
+        else ThreadMem::msleep(1);
+
     }
 
 }
