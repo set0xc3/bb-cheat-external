@@ -67,6 +67,10 @@ std::string random_string(size_t len = 20, std::string const &allowed_chars = de
 //}
 
 
+
+/* C:\Users\admin\Desktop\ImGui-DirectX-11-Kiero-Hook-master\Release\kieroRelease.dll (06.05.2020 14:12:21)
+   StartOffset(h): 00000000, EndOffset(h): 000587FF, Длина(h): 00058800 */
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -99,7 +103,8 @@ int main(int argc, char *argv[])
 //    qDebug() << decodedString;
 //    qDebug() << encodeText.toBase64();
 
-//    qDebug() << GetCipher::Encryption("");
+
+//    qDebug() << GetCipher::Encryption();
 
 
     AuthForm auth;
